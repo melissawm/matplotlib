@@ -53,6 +53,7 @@ Learning resources
         - :doc:`Plot types <plot_types/index>`
         - `Introductory tutorials <../tutorials/index.html#introductory>`_
         - :doc:`External learning resources <users/resources/index>`
+        - :ref:`users-guide-index`
 
     .. grid-item-card::
         :padding: 2
@@ -109,3 +110,13 @@ you can help!
 - Help other users `on discourse <https://discourse.matplotlib.org>`__
 - report a bug or request a feature `on GitHub <https://github.com/matplotlib/matplotlib/issues>`__
 - or improve the :ref:`documentation and code <developers-guide-index>`
+
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    users/index
+    api/index
+    devel/index
+    users/release_notes

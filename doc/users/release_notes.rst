@@ -8,6 +8,7 @@ Release notes
 
 .. include from another document so that it's easy to exclude this for releases
 .. include:: release_notes_next.rst
+    :start-after: :orphan:
 
 Version 3.6
 ===========
