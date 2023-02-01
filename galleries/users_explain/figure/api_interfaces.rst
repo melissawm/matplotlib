@@ -61,6 +61,24 @@ but before they are displayed.
 The implicit "pyplot" interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+``pyplot`` is a stateful interface that handles much of the boilerplate for
+creating figures and axes and connecting them to the backend of your choice. It
+also maintains module-level internal data structures representing the current
+figure and axes to which to direct plotting commands. The ``pyplot`` interface
+is a fairly thin wrapper around the core :ref:`Artist API <artist-layer>` which
+tries to avoid as much code duplication as possible by exposing the API
+function, call signature and docstring in the scripting interface with a minimal
+amount of boilerplate code.
+
+While ``pyplot`` itself is not going away any time soon, it is likely to stay
+frozen in amber exactly as it is, since there is a wealth of legacy code that
+still relies on this interface.
+
+.. note::
+
+  For new code, we strongly recommend considering the explicit "Axes" interface.
+
+
 The `~.matplotlib.pyplot` module shadows most of the
 `~.matplotlib.axes.Axes` plotting methods to give the equivalent of
 the above, where the creation of the Figure and Axes is done for the user:

@@ -58,6 +58,7 @@ process or how to fix something feel free to ask on `gitter
    triage.rst
    development_setup.rst
    development_workflow.rst
+   code_organization.rst
    testing.rst
    documenting_mpl.rst
    style_guide.rst
