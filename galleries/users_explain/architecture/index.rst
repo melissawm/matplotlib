@@ -6,46 +6,43 @@ Matplotlib architecture
 
 **Who is this page for?**
 
-The audience for this page are contributors (including new maintainers) who want
-to understand the reasoning behind the Matplotlib architecture decisions and
-current implementation.
+The audience for this page is advanced users and contributors (including
+maintainers) who want to understand the reasoning behind the Matplotlib
+architecture decisions and current implementation.
 
 Overview of the Matplotlib Architecture
 ---------------------------------------
 
 The top-level Matplotlib object that contains and manages all of the elements in
-a given graphic is called the ``Figure``.
+a given graphic is the ``Figure``. It keeps track of all the child
+:class:`~matplotlib.axes.Axes`, a group of 'special' Artists (titles, figure
+legends, colorbars, etc), and even nested subfigures.
 
-.. plot:: ../galleries/examples/showcase/anatomy.py
+From [`Hunter, Droettboom`_]:
 
-From :ref:`figure_parts`:
+  One of the core architectural tasks ``matplotlib`` must solve is implementing
+  a framework for representing and manipulating a ``Figure`` that is isolated
+  from the act of rendering the ``Figure`` to a user interface window or
+  hardcopy. This makes it possible to build increasingly sophisticated features
+  and logic into the ``Figure``, while keeping the "backends", or output
+  devices, relatively simple. ``matplotlib`` encapsulates not just the drawing
+  interfaces to allow rendering to multiple devices, but also the basic event
+  handling and windowing of most popular user interface toolkits. Because of
+  this, users can create fairly rich interactive graphics and toolkits
+  incorporating mouse and keyboard input that can be plugged without
+  modification into the
+  :ref:`different user interface toolkits we support <backends>`.
 
-  * :class:`~matplotlib.figure.Figure`
-    The **whole** figure.  The Figure keeps track of all the child
-    :class:`~matplotlib.axes.Axes`, a group of 'special' Artists (titles, figure
-    legends, colorbars, etc), and even nested subfigures.
-
-One of the core architectural tasks ``matplotlib`` must solve is implementing a
-framework for representing and manipulating a ``Figure`` that is isolated from
-the act of rendering the ``Figure`` to a user interface window or hardcopy. This
-makes it possible to build increasingly sophisticated features and logic into
-the ``Figure``, while keeping the "backends", or output devices, relatively
-simple. ``matplotlib`` encapsulates not just the drawing interfaces to allow
-rendering to multiple devices, but also the basic event handling and windowing
-of most popular user interface toolkits. Because of this, users can create
-fairly rich interactive graphics and toolkits incorporating mouse and keyboard
-input that can be plugged without modification into the :ref:`different user
-interface toolkits we support<backends>`.
-
-The architecture to accomplish this is logically separated into three layers,
-which can be viewed as a stack. Each layer that sits above another layer knows
-how to talk to the layer below it, but the lower layer is not aware of the
-layers above it.
+To accomplish this, Matplotlib is logically separated into three layers, which
+can be viewed as a stack. Each layer that sits above another layer knows how to
+talk to the layer below it, but the lower layer is not aware of the layers above
+it.
 
 These layers are:
 
 * The **API layer**, which provides a lighter scripting interface (``pyplot``)
   to accomplish simpler tasks, and an explicit object-oriented "Axes" interface.
+  This is the topmost layer in the stack.
 * The **artist layer**, which is where most of the heavy lifting happens. Every
   object rendered on a Matplotlib figure is an instance of ``Artist``;
 * The **backend layer**, at the bottom of the stack, provides concrete
@@ -60,13 +57,14 @@ and manipulation from the act of rendering it.
 
    import matplotlib.pyplot as plt
    text_kwargs = dict(ha='center', va='center', fontsize=22, color='tab:blue')
-   plt.subplots(figsize=(5, 3))
-   plt.subplot(311, xticks=[], yticks=[], facecolor='whitesmoke')
-   plt.text(0.5, 0.5, 'API layer', **text_kwargs)
-   plt.subplot(312, xticks=[], yticks=[], facecolor='whitesmoke')
-   plt.text(0.5, 0.5, 'Artist layer', **text_kwargs)
-   plt.subplot(313, xticks=[], yticks=[], facecolor='whitesmoke')
-   plt.text(0.5, 0.5, 'Backend layer', **text_kwargs)
+   fig, ax = plt.subplots(3, 1, figsize=(5, 3))
+   for i in range(3):
+       ax[i].set_xticks([])
+       ax[i].set_yticks([])
+       ax[i].set_facecolor('whitesmoke')
+   ax[0].text(0.5, 0.5, 'API layer', **text_kwargs)
+   ax[1].text(0.5, 0.5, 'Artist layer', **text_kwargs)
+   ax[2].text(0.5, 0.5, 'Backend layer', **text_kwargs)
 
 The API layer
 ~~~~~~~~~~~~~
@@ -83,10 +81,8 @@ In addition, a number of downstream libraries (like `pandas` and xarray_) offer
 a ``plot`` method implemented directly on their data classes so that users can
 call ``data.plot()``.
 
-.. _xarray: https://xarray.pydata.org
-
-See :ref:`api_interfaces` and :doc:`../../devel/MEP/MEP27` for more details. See also
-https://github.com/matplotlib/mpl-gui.
+See :ref:`api_interfaces` and :doc:`../../../devel/MEP/MEP27` for more details.
+See also https://github.com/matplotlib/mpl-gui.
 
 .. _artist-layer:
 
@@ -147,7 +143,7 @@ modules like ``matplotlib.backends.backend_qt4agg``.
 The job of the ``Renderer`` is to provide a low-level drawing interface for
 putting ink onto the canvas. One of the design decisions that has worked quite
 well for matplotlib is support for a core pixel-based renderer using the C++
-template library *Anti-Grain Geometry* or "agg" [She06]. This is a
+template library *Anti-Grain Geometry* or "agg" [Shemanarev_]. This is a
 high-performance library for rendering anti-aliased 2D graphics that produces
 attractive images. matplotlib provides support for inserting pixel buffers
 rendered by the agg backend into each user interface toolkit we support, so one
@@ -169,40 +165,18 @@ once run everywhere" fashion. For example, the interactive panning and zooming
 of matplotlib figures that works across all user interface toolkits is
 implemented in the matplotlib event framework.
 
-Glossary
---------
-
-We do not have a description of the concepts and mechanisms used in matplotlib. Some information is available in the respective classes or in examples. But I haven't found a concise overview giving the big picture.
-
-It would be valuable for users (and also developers) to have a single help page collecting this information.
-
-In particular:
-Elements of a plot
-
-    Figure
-    Axes
-    Axis
-    Artists
-    Patches
-    ...
-
-Coordinates and scaling
-
-    Figure / Axes / Data coordinates
-    Bbox
-    aspect handling (original and active axes positions)
-    transforms
-    ...
-
-
 Further reading
 ---------------
 
-* [1] https://www.aosabook.org/en/matplotlib.html
-* [2] https://medium.datadriveninvestor.com/data-visualization-with-python-matplotlib-architecture-6b05af533569
-* [3] Maxim Shemanarev. Anti-Grain Geometry: A high quality rendering engine for C++, 2002-2006.
-
-
-.. _article: https://www.aosabook.org/en/matplotlib.html
+.. _Hunter, Droettboom: `John Hunter and Michael Droettboom, *The Architecture of Open Source Applications (Volume 2), matplotlib* <https://www.aosabook.org/en/matplotlib.html>`_.`
 .. _blog: https://medium.datadriveninvestor.com/data-visualization-with-python-matplotlib-architecture-6b05af533569
-.. _she06: Maxim Shemanarev. Anti-Grain Geometry: A high quality rendering engine for C++, 2002-2006.
+.. _Shemanarev: Maxim Shemanarev. Anti-Grain Geometry: A high quality rendering engine for C++, 2002-2006.
+
+.. _xarray: https://xarray.pydata.org
+
+
+.. toctree::
+    :maxdepth: 1
+
+    Concept: Matplotlib Application Interfaces (APIs) <api_interfaces>
+    Concept: Output backends <backends>

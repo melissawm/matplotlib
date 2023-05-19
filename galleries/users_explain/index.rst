@@ -19,4 +19,4 @@ Using Matplotlib
     text/index
     animations/index
     toolkits/index
-    architecture
+    architecture/index
