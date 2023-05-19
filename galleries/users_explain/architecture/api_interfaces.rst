@@ -26,7 +26,6 @@ interfaces in the same example.  Here we attempt to point out how the "pyplot"
 and downstream interfaces relate to the explicit "Axes" interface to help users
 better navigate the library.
 
-
 Native Matplotlib interfaces
 ----------------------------
 
