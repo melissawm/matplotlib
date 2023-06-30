@@ -462,7 +462,7 @@ html_theme_options = {
     },
     "navbar_end": ["theme-switcher", "version-switcher", "mpl_icon_links"],
     "secondary_sidebar_items": "page-toc.html",
-     "footer_start": ["copyright", "sphinx-version", "doc_version"],
+    "footer_start": ["copyright", "sphinx-version", "doc_version"],
 }
 include_analytics = is_release_build
 if include_analytics:
@@ -487,9 +487,6 @@ html_last_updated_fmt = '%b %d, %Y'
 # Content template for the index page.
 html_index = 'index.html'
 
-# Custom sidebar templates, maps document names to template names.
-# html_sidebars = {}
-
 # Custom sidebar templates, maps page names to templates.
 html_sidebars = {
     "index": [
@@ -497,6 +494,10 @@ html_sidebars = {
         "sidebar_versions.html",
         "cheatsheet_sidebar.html",
         "donate_sidebar.html",
+    ],
+    "devel/index": [
+        "sidebar_contribute",
+        "sidebar-nav-bs"
     ],
     # '**': ['localtoc.html', 'pagesource.html']
 }
