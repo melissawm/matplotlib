@@ -231,9 +231,10 @@ manage, or release manage, these guidelines describe how our current process wor
          :maxdepth: 1
          :caption: Documentation
 
-         document
-         style_guide
-         tag_guidelines
+         document_build
+         document_format
+         document_style
+         document_tag
 
    .. grid-item-card::
       :shadow: none
