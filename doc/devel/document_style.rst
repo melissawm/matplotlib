@@ -1,7 +1,10 @@
+.. redirect-from:: /devel/style_guide
 
-=========================
-Documentation style guide
-=========================
+.. _document_style:
+
+***********
+Style guide
+***********
 
 This guide contains best practices for the language and formatting of Matplotlib
 documentation.
@@ -394,7 +397,8 @@ Use Sphinx's built in math support:
 In rare cases we want the rendering of the mathematical text in the
 documentation html to exactly match with the rendering of the mathematical
 expression in the Matplotlib figure. In these cases, you can use the
-`matplotlib.sphinxext.mathmpl` Sphinx extension. Usage is described in :doc:`../users/explain/text/mathtext`.
+`matplotlib.sphinxext.mathmpl` Sphinx extension. Usage is described in
+:doc:`../users/explain/text/mathtext`.
 
 reStructuredText
 ----------------
@@ -460,6 +464,7 @@ Additional resources
 This style guide is not a comprehensive standard. For a more thorough
 reference of how to contribute to documentation, see the links below. These
 resources contain common best practices for writing documentation.
+
 
 * `Python Developer's Guide <https://devguide.python.org/documenting/#documenting-python>`_
 * `Google Developer Style Guide <https://developers.google.com/style>`_
