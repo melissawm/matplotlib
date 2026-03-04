@@ -32,7 +32,7 @@ Ways to contribute
       for an existing issue that describes your problem or
       open a new issue to inform us of the problem you observed and discuss the best approach
       to fix it. If your contributions would not be captured on GitHub (social media,
-      communication, educational content), you can also reach out to us on gitter_,
+      communication, educational content), you can also reach out to us on
       `Discourse <https://discourse.matplotlib.org/>`__ or attend any of our `community
       meetings <https://scientific-python.org/calendars>`__.
 
@@ -164,7 +164,7 @@ we mean by triage are:
 Our triage process is discussed in detail in :ref:`bug_triaging`.
 
 If you have any questions about the process, please reach out on the
-:ref:`contributor_incubator`
+:ref:`contributor_incubator`.
 
 .. _other_ways_to_contribute:
 
@@ -238,8 +238,8 @@ you can browse previous meeting notes on `GitHub
 <https://github.com/matplotlib/ProjectManagement/tree/master/new_contributor_meeting>`_.
 We recommend joining the meeting to clarify any doubts, or lingering
 questions you might have, and to get to know a few of the people behind the
-GitHub handles 😉. You can reach out to us on gitter_ for any clarifications or
-suggestions. We ❤ feedback!
+GitHub handles 😉. You can reach out to us on `incubator chat`_ for any
+clarifications or suggestions. We ❤ feedback!
 
 .. _contributor_incubator:
 
@@ -247,18 +247,20 @@ Contributor incubator
 ---------------------
 
 The incubator is our non-public communication channel for new contributors. It
-is a private gitter_ (chat) room moderated by core Matplotlib developers where
-you can get guidance and support for your first few PRs. It's a place where you
-can ask questions about anything: how to use git, GitHub, how our PR review
-process works, technical questions about the code, what makes for good
+is a public chat room on Discourse_ moderated by core Matplotlib developers
+where you can get guidance and support for your first few PRs. It's a place
+where you can ask questions about anything: how to use git, GitHub, how our PR
+review process works, technical questions about the code, what makes for good
 documentation or a blog post, how to get involved in community work, or get a
 "pre-review" on your PR.
 
-To join, please go to our public `community gitter`_ channel, and ask to be added to
-``#incubator``. One of our core developers will see your message and will add you.
+To join, go to Discourse_ and click on the chat bubble icon next to the search
+icon at the top right of the page. Then, find the "Incubator" channel.
 
-.. _gitter: https://gitter.im/matplotlib/matplotlib
-.. _community gitter: https://gitter.im/matplotlib/community
+.. _Discourse: https://discourse.matplotlib.org/
+.. _development chat: https://discourse.matplotlib.org/chat/c/matplotlib/2
+.. _community chat: https://discourse.matplotlib.org/chat/c/community/3
+.. _incubator chat: https://discourse.matplotlib.org/chat/c/incubator/4
 
 .. _good_first_issues:
 
@@ -316,9 +318,10 @@ Get connected
 When in doubt, we recommend going together! Get connected with our community of
 active contributors, many of whom felt just like you when they started out and
 are happy to welcome you and support you as you get to know how we work, and
-where things are. You can reach out on any of our :ref:`communication-channels`.
-For development questions we recommend reaching out on our development gitter_
-chat room and for community questions reach out at `community gitter`_.
+where things are. You can reach out on any of our :ref:`communication-channels`,
+including the chat space on Discourse_. For development questions we recommend
+reaching out on our `development chat`_ and for community questions reach out at
+the `community chat`_.
 
 .. _managing_issues_prs:
 
