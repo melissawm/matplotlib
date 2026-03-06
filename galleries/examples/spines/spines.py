@@ -1,7 +1,7 @@
 """
-======
-Spines
-======
+===============
+Spines, testing
+===============
 
 This demo compares:
 

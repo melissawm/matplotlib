@@ -58,7 +58,7 @@ For more information see :doc:`/gallery/ticks/ticks_too_many`.
 .. _howto-determine-artist-extent:
 
 Determine the extent of Artists in the Figure
----------------------------------------------
+--------------------------------------------
 
 Sometimes we want to know the extent of an Artist.  Matplotlib `.Artist` objects
 have a method `.Artist.get_window_extent` that will usually return the extent of
