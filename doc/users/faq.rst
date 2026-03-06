@@ -18,7 +18,7 @@ Please see :ref:`figures-not-showing`.
 .. _how-to-too-many-ticks:
 
 Why do I have so many ticks, and/or why are they out of order?
---------------------------------------------------------------
+------------------------------------------------------------
 
 One common cause for unexpected tick behavior is passing a *list of strings
 instead of numbers or datetime objects*. This can easily happen without notice
