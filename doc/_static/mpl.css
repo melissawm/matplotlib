@@ -209,6 +209,14 @@ div.wide-table table th.stub {
     padding-left: 0;
 }
 
+/* no-caption-toc is a custom class that removes the caption from a
+ * toctree listing inside a grid-item-card.
+ */
+
+.no-caption-toc>p.caption{
+    display: none;
+}
+
 .sidebar-cheatsheets {
     margin-bottom: 3em;
 }
