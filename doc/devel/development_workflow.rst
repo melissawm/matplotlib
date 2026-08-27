@@ -219,8 +219,9 @@ Manage commit history
 Explore your repository
 -----------------------
 
-To see a graphical representation of the repository branches and
-commits::
+Most coding IDEs have built-in tools to see a graphical representation of the
+repository branches and commits. If you prefer using a built-in tool, you can
+use::
 
    gitk --all
 
