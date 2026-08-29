@@ -202,7 +202,7 @@ div.wide-table table th.stub {
  * .. toctree::
  *
  */
- .section-toc.toctree-wrapper .toctree-l1>a{
+.section-toc.toctree-wrapper .toctree-l1>a{
     display: none;
 }
 .section-toc.toctree-wrapper .toctree-l1>ul{
@@ -212,9 +212,17 @@ div.wide-table table th.stub {
 /* no-caption-toc is a custom class that removes the caption from a
  * toctree listing inside a grid-item-card.
  */
-
 .no-caption-toc>p.caption{
     display: none;
+}
+
+/* Align the button at the bottom of a grid-item-card, so that buttons line up
+ * across cards whose body text wraps to different heights.
+ * (used in devel/index)
+ */
+.sd-card-body.sd-d-flex-column > p:last-child {
+    margin-top: auto;
+    margin-bottom: 0;
 }
 
 .sidebar-cheatsheets {

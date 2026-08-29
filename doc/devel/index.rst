@@ -41,6 +41,7 @@ context that may be necessary for resolving the issue:
 
    .. grid-item-card::
       :class-header: sd-fs-5
+      :class-body: sd-d-flex-column
 
       :octicon:`bug;1em;sd-text-info` **Submit a bug report**
       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -48,13 +49,14 @@ context that may be necessary for resolving the issue:
       Thank you for your help in keeping bug reports targeted and descriptive.
 
       .. button-link:: https://github.com/matplotlib/matplotlib/issues/new/choose
-            :expand:
-            :color: primary
+         :expand:
+         :color: primary
 
-            Report a bug
+         Report a bug
 
    .. grid-item-card::
       :class-header: sd-fs-5
+      :class-body: sd-d-flex-column
 
       :octicon:`light-bulb;1em;sd-text-info` **Request a new feature**
       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
