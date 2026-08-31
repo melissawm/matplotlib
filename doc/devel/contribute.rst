@@ -149,6 +149,14 @@ please reach out on the :ref:`contributor_incubator`.
 
 .. _`open an issue`: https://github.com/matplotlib/matplotlib/issues/new?assignees=&labels=Documentation&projects=&template=documentation.yml&title=%5BDoc%5D%3A+
 
+Sphinx Theme
+------------
+
+Matplotlib has a few subprojects that share the same navbar and style, so these
+are centralized as a sphinx theme at
+`mpl_sphinx_theme <https://github.com/matplotlib/mpl-sphinx-theme>`_.  Changes
+to the style or top bar should be made there to propagate across all subprojects.
+
 .. _contribute_triage:
 
 Triage
