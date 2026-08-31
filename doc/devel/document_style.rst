@@ -385,20 +385,206 @@ Keep the documentation clear of Python output lines.
    |    fig.show()                      |                                    |
    +------------------------------------+------------------------------------+
 
-Mathematical expressions
-------------------------
-Use Sphinx's built in math support:
+.. _docstring_formatting:
 
-- **Inline math:** Use the ``:math:``
-  `role <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#math>`__
-- **Math blocks:** Use the ``.. math::``
-  `directive <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#math>`__
+Docstring formatting conventions
+--------------------------------
 
-In rare cases we want the rendering of the mathematical text in the
-documentation html to exactly match with the rendering of the mathematical
-expression in the Matplotlib figure. In these cases, you can use the
-`matplotlib.sphinxext.mathmpl` Sphinx extension (See also the
-:doc:`../users/explain/text/mathtext` tutorial.)
+The basic docstring conventions are covered in the `numpydoc docstring guide`_
+and the Sphinx_ documentation.  Some Matplotlib-specific formatting conventions
+to keep in mind:
+
+.. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html
+.. _Sphinx: http://www.sphinx-doc.org
+
+Quote positions
+^^^^^^^^^^^^^^^
+
+The quotes for single line docstrings are on the same line (pydocstyle D200)::
+
+    def get_linewidth(self):
+        """Return the line width in points."""
+
+The quotes for multi-line docstrings are on separate lines (pydocstyle D213)::
+
+        def set_linestyle(self, ls):
+        """
+        Set the linestyle of the line.
+
+        [...]
+        """
+
+Function arguments
+^^^^^^^^^^^^^^^^^^
+
+Function arguments and keywords within docstrings should be referred to
+using the ``*emphasis*`` role. This will keep Matplotlib's documentation
+consistent with Python's documentation:
+
+.. code-block:: rst
+
+  If *linestyles* is *None*, the default is 'solid'.
+
+Do not use the ```default role``` or the ````literal```` role:
+
+.. code-block:: rst
+
+  Neither `argument` nor ``argument`` should be used.
+
+Quotes for strings
+^^^^^^^^^^^^^^^^^^
+
+Matplotlib does not have a convention whether to use single-quotes or
+double-quotes.  There is a mixture of both in the current code.
+
+Use simple single or double quotes when giving string values, e.g.
+
+.. code-block:: rst
+
+  If 'tight', try to figure out the tight bbox of the figure.
+
+  No ``'extra'`` literal quotes.
+
+The use of extra literal quotes around the text is discouraged. While they
+slightly improve the rendered docs, they are cumbersome to type and difficult
+to read in plain-text docs.
+
+Parameter type descriptions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The main goal for parameter type descriptions is to be readable and
+understandable by humans. If the possible types are too complex use a
+simplification for the type description and explain the type more
+precisely in the text.
+
+We do not use formal type annotation syntax for type descriptions in
+docstrings; e.g. we use ``list of str`` rather than  ``list[str]``; we
+use ``int or str`` rather than ``int | str`` or ``Union[int, str]``.
+
+Generally, the `numpydoc docstring guide`_ conventions apply. The following
+rules expand on them where the numpydoc conventions are not specific.
+
+Use ``float`` for a type that can be any number.
+
+Use ``(float, float)`` to describe a 2D position. The parentheses should be
+included to make the tuple-ness more obvious.
+
+Use ``array-like`` for homogeneous numeric sequences, which could
+typically be a numpy.array. Dimensionality may be specified using ``2D``,
+``3D``, ``n-dimensional``. If you need to have variables denoting the
+sizes of the dimensions, use capital letters in brackets
+(``(M, N) array-like``). When referring to them in the text they are easier
+read and no special formatting is needed. Use ``array`` instead of
+``array-like`` for return types if the returned object is indeed a numpy array.
+
+``float`` is the implicit default dtype for array-likes. For other dtypes
+use ``array-like of int``.
+
+Some possible uses::
+
+  2D array-like
+  (N,) array-like
+  (M, N) array-like
+  (M, N, 3) array-like
+  array-like of int
+
+Non-numeric homogeneous sequences are described as lists, e.g.::
+
+  list of str
+  list of `.Artist`
+
+Reference types
+^^^^^^^^^^^^^^^
+
+Generally, the rules from :ref:`referring-to-other-code` apply. More specifically:
+
+Use full references ```~matplotlib.colors.Normalize``` with an
+abbreviation tilde in parameter types. While the full name helps the
+reader of plain text docstrings, the HTML does not need to show the full
+name as it links to it. Hence, the ``~``-shortening keeps it more readable.
+
+Use abbreviated links ```.Normalize``` in the text.
+
+.. code-block:: rst
+
+   norm : `~matplotlib.colors.Normalize`, optional
+        A `.Normalize` instance is used to scale luminance data to 0, 1.
+
+Default values
+^^^^^^^^^^^^^^
+
+As opposed to the numpydoc guide, parameters need not be marked as
+*optional* if they have a simple default:
+
+- use ``{name} : {type}, default: {val}`` when possible.
+- use ``{name} : {type}, optional`` and describe the default in the text if
+  it cannot be explained sufficiently in the recommended manner.
+
+The default value should provide semantic information targeted at a human
+reader. In simple cases, it restates the value in the function signature.
+If applicable, units should be added.
+
+.. code-block:: rst
+
+   Prefer:
+       interval : int, default: 1000ms
+   over:
+       interval : int, default: 1000
+
+If *None* is only used as a sentinel value for "parameter not specified", do
+not document it as the default. Depending on the context, give the actual
+default, or mark the parameter as optional if not specifying has no particular
+effect.
+
+.. code-block:: rst
+
+   Prefer:
+       dpi : float, default: :rc:`figure.dpi`
+   over:
+       dpi : float, default: None
+
+   Prefer:
+       textprops : dict, optional
+           Dictionary of keyword parameters to be passed to the
+           `~matplotlib.text.Text` instance contained inside TextArea.
+   over:
+       textprops : dict, default: None
+           Dictionary of keyword parameters to be passed to the
+           `~matplotlib.text.Text` instance contained inside TextArea.
+
+Wrap parameter lists
+^^^^^^^^^^^^^^^^^^^^
+
+Long parameter lists should be wrapped using a ``\`` for continuation and
+starting on the new line without any indent (no indent because pydoc will
+parse the docstring and strip the line continuation so that indent would
+result in a lot of whitespace within the line):
+
+.. code-block:: python
+
+  def add_axes(self, *args, **kwargs):
+      """
+      ...
+
+      Parameters
+      ----------
+      projection : {'aitoff', 'hammer', 'lambert', 'mollweide', 'polar', \
+  'rectilinear'}, optional
+          The projection type of the axes.
+
+      ...
+      """
+
+Alternatively, you can describe the valid parameter values in a dedicated
+section of the docstring.
+
+rcParams
+^^^^^^^^
+
+rcParams can be referenced with the custom ``:rc:`` role:
+:literal:`:rc:\`foo\`` yields ``rcParams["foo"] = 'default'``, which is a link
+to the :file:`matplotlibrc` file description.
+
 
 Additional resources
 ====================
