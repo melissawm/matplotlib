@@ -265,8 +265,8 @@ the file you want to open and select "Open with Live Server."
 
 .. _development-install:
 
-Install Matplotlib in editable mode
-===================================
+Install Matplotlib for development
+==================================
 
 Install Matplotlib in editable mode from the :file:`matplotlib` directory using the
 command ::
@@ -277,10 +277,6 @@ The 'editable/develop mode' builds everything and places links in your Python en
 so that Python will be able to import Matplotlib from your development source directory.
 This allows you to import your modified version of Matplotlib without having to
 re-install after changing a ``.py`` or compiled extension file.
-
-When working on a branch that does not have Meson enabled, meaning it does not
-have :ghpull:`26621` in its history (log), you will have to reinstall from source
-each time you change any compiled extension code.
 
 If the installation is not working, please consult the :ref:`troubleshooting guide <troubleshooting-faq>`.
 If the guide does not offer a solution, please reach out via `discourse <https://discourse.matplotlib.org>`_
