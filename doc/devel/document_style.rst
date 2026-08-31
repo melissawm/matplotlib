@@ -400,66 +400,6 @@ expression in the Matplotlib figure. In these cases, you can use the
 `matplotlib.sphinxext.mathmpl` Sphinx extension (See also the
 :doc:`../users/explain/text/mathtext` tutorial.)
 
-reStructuredText
-----------------
-
-Matplotlib uses reStructuredText Markup for documentation. Sphinx helps to
-transform these documents into appropriate formats for accessibility and
-visibility.
-
-- `reStructuredText Specifications <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`_
-- `Quick Reference Document <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_
-
-
-Lists
-^^^^^
-Bulleted lists are for items that do not require sequencing. Numbered lists are
-exclusively for performing actions in a determined order.
-
-.. table::
-   :width: 100%
-   :widths: 50, 50
-
-   +------------------------------------+------------------------------------+
-   | Correct                            | Incorrect                          |
-   +====================================+====================================+
-   | The example uses three graphs.     | The example uses three graphs.     |
-   +------------------------------------+------------------------------------+
-   | - Bar                              | 1. Bar                             |
-   | - Line                             | 2. Line                            |
-   | - Pie                              | 3. Pie                             |
-   +------------------------------------+------------------------------------+
-   | These four steps help to get       | The following steps are important  |
-   | started using Matplotlib.          | to get started using Matplotlib.   |
-   +------------------------------------+------------------------------------+
-   |  1. Import the Matplotlib library. |  - Import the Matplotlib library.  |
-   |  2. Import the necessary modules.  |  - Import the necessary modules.   |
-   |  3. Set and assign data to work on.|  - Set and assign data to work on. |
-   |  4. Transform data with methods and|  - Transform data with methods and |
-   |     functions.                     |    functions.                      |
-   +------------------------------------+------------------------------------+
-
-Tables
-^^^^^^
-Use ASCII tables with reStructuredText standards in organizing content.
-Given the size of the table and length of each entry, use:
-
-+-------------+-------------------------------+--------------------+
-|             | small table                   | large table        |
-+-------------+-------------------------------+--------------------+
-| short entry | `simple or grid table`_       | `grid table`_      |
-+-------------+-------------------------------+--------------------+
-| long entry  | `list table`_                 | `csv table`_       |
-+-------------+-------------------------------+--------------------+
-
-For more information, see `rst tables <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#tables>`_.
-
-.. _`simple or grid table`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#tables
-.. _`grid table`: https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#grid-tables
-.. _`list table`: https://docutils.sourceforge.io/docs/ref/rst/directives.html#list-table
-.. _`csv table`: https://docutils.sourceforge.io/docs/ref/rst/directives.html#csv-table-1
-
-
 Additional resources
 ====================
 This style guide is not a comprehensive standard. For a more thorough

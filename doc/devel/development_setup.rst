@@ -265,8 +265,8 @@ the file you want to open and select "Open with Live Server."
 
 .. _development-install:
 
-Install Matplotlib in editable mode
-===================================
+Install Matplotlib for development
+==================================
 
 Install Matplotlib in editable mode from the :file:`matplotlib` directory using the
 command ::

@@ -7,30 +7,34 @@
 Build Documentation
 *******************
 
-All documentation is built from the :file:`doc/`.  The :file:`doc/`
-directory contains configuration files for Sphinx and reStructuredText
-(ReST_; ``.rst``) files that are rendered to documentation pages.
+The documentation for Matplotlib is generated from reStructuredText (ReST_)
+using the Sphinx_ documentation generation tool. The theme used for the
+documentation is the `mpl_sphinx_theme <https://github.com/matplotlib/mpl-sphinx-theme>`_.
 
 General file structure
 ======================
-Documentation is created in three ways.  First, API documentation
-(:file:`doc/api`) is created by Sphinx_ from
-the docstrings of the classes in the Matplotlib library.  Except for
-:file:`doc/api/api_changes/`,  ``.rst`` files in :file:`doc/api` are created
-when the documentation is built.  See :ref:`writing-docstrings`.
 
-Second, our example pages, tutorials, and some of the narrative documentation
-are created by `Sphinx Gallery`_.  Sphinx Gallery converts example Python files
-to ``*.rst`` files with the result of Matplotlib plot calls as embedded images.
-See :ref:`writing-examples-and-tutorials`.
+All documentation is built from the :file:`doc/` folder, where you will find
+configuration files for Sphinx and reStructuredText (ReST_; ``.rst``) files that
+are rendered to documentation pages.
 
-Third, Matplotlib has informative documentation written in ReST_ in subdirectories of
-:file:`doc`. General and historical information about the project is in :file:`doc/project`,
-the installation guide is in :file:`doc/install`, and release notes are managed in
-:file:`doc/release`. Maintenance documentation is in :file:`doc/devel` and the website
-always redirects to the latest version of these documents. We also maintain a list of
-external resources in :file:`doc/users/resources/index.rst`. See
-:ref:`writing-rest-pages`.
+Documentation is created in three ways:
+
+* API documentation (:file:`doc/api`) is created by Sphinx_ from the docstrings
+  of the classes in the Matplotlib library. Except for
+  :file:`doc/api/api_changes/`,  ``.rst`` files in :file:`doc/api` are created
+  when the documentation is built.  See :ref:`writing-docstrings`.
+* Our example pages, tutorials, and some of the narrative documentation are
+  created by `Sphinx Gallery`_.  Sphinx Gallery converts example Python files
+  to ``*.rst`` files with the result of Matplotlib plot calls as embedded
+  images. See :ref:`writing-examples-and-tutorials`.
+* Informative documentation is written in ReST_ and is located in subdirectories
+  of :file:`doc`. General and historical information about the project is in
+  :file:`doc/project`, the installation guide is in :file:`doc/install`, and
+  release notes are managed in :file:`doc/release`. Maintenance documentation is
+  in :file:`doc/devel` and the website always redirects to the latest version of
+  these documents. We also maintain a list of external resources in
+  :file:`doc/users/resources/index.rst`. See :ref:`writing-rest-pages`.
 
 .. note::
 
@@ -39,19 +43,13 @@ external resources in :file:`doc/users/resources/index.rst`. See
   (excepting :file:`doc/api/api_changes/`).  Sphinx_ regenerates
   files in these directories when building documentation.
 
-Set up the build
-================
-
-The documentation for Matplotlib is generated from reStructuredText (ReST_)
-using the Sphinx_ documentation generation tool.
+Build the docs
+==============
 
 To build the documentation you will need to
 :ref:`set up Matplotlib for development <installing_for_devs>`. Note in
 particular the :ref:`additional dependencies <doc-dependencies>` required to
 build the documentation.
-
-Build the docs
-==============
 
 The documentation sources are found in the :file:`doc/` directory.
 The configuration file for Sphinx is :file:`doc/conf.py`. It controls which
@@ -97,8 +95,7 @@ Other useful invocations include
 
 The ``SPHINXOPTS`` variable is set to ``-W --keep-going`` by default to build
 the complete docs but exit with exit status 1 if there are warnings.  To unset
-it, set
-the variable to a blank space. On Windows, set the options as environment variables.
+it, set the variable to a blank space. On Windows, set the options as environment variables.
 
 .. tab-set::
   :sync-group: category
@@ -154,11 +151,3 @@ for opening them in your default browser is:
 .. _ReST: https://docutils.sourceforge.io/rst.html
 .. _Sphinx: http://www.sphinx-doc.org
 .. _`Sphinx Gallery`: https://sphinx-gallery.readthedocs.io/en/latest/
-
-Theme
-=====
-
-Matplotlib has a few subprojects that share the same navbar and style, so these
-are centralized as a sphinx theme at
-`mpl_sphinx_theme <https://github.com/matplotlib/mpl-sphinx-theme>`_.  Changes to the
-style or top bar should be made there to propagate across all subprojects.
