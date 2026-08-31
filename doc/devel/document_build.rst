@@ -4,7 +4,7 @@
 .. _document-build:
 
 *******************
-Build Documentation
+Build documentation
 *******************
 
 The documentation for Matplotlib is generated from reStructuredText (ReST_)
