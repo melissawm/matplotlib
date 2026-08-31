@@ -2,9 +2,9 @@
 
 .. _documenting-matplotlib:
 
-===================
-Write documentation
-===================
+=============================
+Write and build documentation
+=============================
 
 All documentation is built from the :file:`doc/` folder, but (as explained in this guide)
 some of these files are generated from inline docstrings or sphinx gallery files.
