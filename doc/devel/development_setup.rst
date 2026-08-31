@@ -278,10 +278,6 @@ so that Python will be able to import Matplotlib from your development source di
 This allows you to import your modified version of Matplotlib without having to
 re-install after changing a ``.py`` or compiled extension file.
 
-When working on a branch that does not have Meson enabled, meaning it does not
-have :ghpull:`26621` in its history (log), you will have to reinstall from source
-each time you change any compiled extension code.
-
 If the installation is not working, please consult the :ref:`troubleshooting guide <troubleshooting-faq>`.
 If the guide does not offer a solution, please reach out via `discourse <https://discourse.matplotlib.org>`_
 or :ref:`open an issue <submitting-a-bug-report>`.
