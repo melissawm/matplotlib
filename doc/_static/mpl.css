@@ -160,7 +160,7 @@ div.wide-table table th.stub {
 }
 .checklist li:before {
     content: "\2610\2001";
-    margin-left: -24px;
+    margin-left: -30px;
 }
 .checklist li p {
     display: inline;
