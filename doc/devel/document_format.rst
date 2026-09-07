@@ -1,156 +1,9 @@
 .. redirect-from:: /devel/documenting_mpl
+.. _write-documentation:
 
-.. _documenting-matplotlib:
-
-===================
+*******************
 Write documentation
-===================
-
-All documentation is built from the :file:`doc/` folder, but (as explained in this guide)
-some of these files are generated from inline docstrings or sphinx gallery files.
-
-.. note::
-
-  Don't directly edit the ``.rst`` files in :file:`doc/plot_types`,
-  :file:`doc/gallery`,  :file:`doc/tutorials`, :file:`doc/users/explain` and
-  :file:`doc/api` (except :file:`doc/api/api_changes/`).  Sphinx_ regenerates
-  files in these directories when building documentation.
-
-Overview
-========
-Documentation is created in three ways. First, API documentation (:file:`doc/api`) is
-created by Sphinx_ from the docstrings of the classes in the Matplotlib library.  Except
-for :file:`doc/api/api_changes/`,  ``.rst`` files in :file:`doc/api` are created
-when the documentation is built.  See :ref:`writing-docstrings`.
-
-Second, our example pages, tutorials, and some of the user guide are created by
-`Sphinx Gallery`_.  Sphinx Gallery converts Python files in :file:`galleries` to
-``*.rst`` files that contain the results of Matplotlib plot calls as embedded images.
-See :ref:`writing-examples-and-tutorials`.
-
-Third, Matplotlib has informative documentation written in ReST in subdirectories of
-:file:`doc`. General and historical information about the project is in :file:`doc/project`,
-the installation guide is in :file:`doc/install`, and release notes are managed in
-:file:`doc/release`. Maintenance documentation is in :file:`doc\devel` and the website
-always redirects to the latest version of these documents. We also maintain a list of
-external resources in :file:`doc/users/resources/index.rst`. To improve these documents
-or add resources, see :ref:`writing-rest-pages`.
-
-Theme
------
-
-Matplotlib has a few subprojects that share the same navbar and style, so these
-are centralized as a sphinx theme at
-`mpl_sphinx_theme <https://github.com/matplotlib/mpl-sphinx-theme>`_.  Changes to the
-style or top bar should be made there to propagate across all subprojects.
-
-.. _build_docs:
-
-Build the docs
-==============
-The documentation for Matplotlib is generated from reStructuredText (ReST_)
-using the Sphinx_ documentation generation tool. To build the documentation you will
-need to :ref:`set up Matplotlib for development <installing_for_devs>`. Note in
-particular the :ref:`additional dependencies <doc-dependencies>` required to
-build the documentation.
-
-The documentation sources are found in the :file:`doc/` directory.
-The configuration file for Sphinx is :file:`doc/conf.py`. It controls which
-directories Sphinx parses, how the docs are built, and how the extensions are
-used. To build the documentation in html format, cd into :file:`doc/` and run:
-
-.. code-block:: sh
-
-   make html
-
-.. note::
-
-   Since the documentation is very large, the first build may take 10-20 minutes,
-   depending on your machine.  Subsequent builds will be faster.
-
-Build options
--------------
-Other useful invocations include:
-
-.. list-table::
-  :widths: 30 30 40
-  :header-rows: 1
-  :stub-columns: 1
-
-  * - invocation
-    - description
-    - notes
-  * - ``make html-noplot``
-    - skip generation of the gallery images
-    -
-  * - ``make html-skip-subdirs``
-    - skip specific subdirectories
-    - If a gallery directory is skipped, the gallery images are not generated.  The first
-      time this is run, it creates ``.mpl_skip_subdirs.yaml`` which can be edited to add
-      or remove subdirectories
-  * - ``make clean``
-    - Delete built files.
-    - May help if you get errors about missing paths or broken links.
-  * - ``make latexpdf``
-    - Build pdf docs
-    -
-
-The ``SPHINXOPTS`` variable is set to ``-W --keep-going`` by default to build
-the complete docs but exit with exit status 1 if there are warnings. To unset it, set
-the variable to a blank space. On Windows, set the options as environment variables.
-
-.. tab-set::
-  :sync-group: category
-
-  .. tab-item:: Linux & macOS
-    :sync: linux
-
-    .. code-block:: sh
-
-      make SPHINXOPTS= html
-
-  .. tab-ITEM:: Windows
-    :sync: windows
-
-    .. code-block:: bat
-
-      set SPHINXOPTS= & make html
-
-You can use the ``O`` variable to set additional options:
-
-* ``O=-j4`` runs a parallel build with 4 processes.
-* ``O=-Dplot_formats=png:100`` saves figures in low resolution.
-
-Multiple options can be combined, e.g:
-
-.. tab-set::
-  :sync-group: category
-
-  .. tab-item:: Linux & macOS
-    :sync: linux
-
-    .. code-block:: sh
-
-      make SPHINXOPTS= O='-j4 -Dplot_formats=png:100' html
-
-  .. tab-ITEM:: Windows
-    :sync: windows
-
-    .. code-block:: bat
-
-      set SPHINXOPTS= & set O=-j4 -Dplot_formats=png:100 & make html
-
-
-Show locally built docs
------------------------
-
-The built docs are available in the folder :file:`build/html`. A shortcut
-for opening them in your default browser is:
-
-.. code-block:: sh
-
-   make show
-
+*******************
 
 .. _writing-rest-pages:
 
@@ -167,97 +20,8 @@ a good introduction into using ReST. More complete information is available in
 the `reStructuredText reference documentation
 <https://docutils.sourceforge.io/rst.html#reference-documentation>`_.
 
-This section contains additional information and conventions how ReST is used
-in the Matplotlib documentation.
-
-Formatting and style conventions
---------------------------------
-
-It is useful to strive for consistency in the Matplotlib documentation.  Here
-are some formatting and style conventions that are used.
-
-Section formatting
-^^^^^^^^^^^^^^^^^^
-
-Use `sentence case <https://apastyle.apa.org/style-grammar-guidelines/capitalization/sentence-case>`__
-``Upper lower`` for section titles, e.g., ``Possible hangups`` rather than
-``Possible Hangups``.
-
-We aim to follow the recommendations from the
-`Python documentation <https://devguide.python.org/documenting/#sections>`_
-and the `Sphinx reStructuredText documentation <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#sections>`_
-for section markup characters, i.e.:
-
-- ``#`` with overline, for parts. This is reserved for the main title in
-  ``index.rst``. All other pages should start with "chapter" or lower.
-- ``*`` with overline, for chapters
-- ``=``, for sections
-- ``-``, for subsections
-- ``^``, for subsubsections
-- ``"``, for paragraphs
-
-This may not yet be applied consistently in existing docs.
-
-Table formatting
-^^^^^^^^^^^^^^^^
-Given the size of the table and length of each entry, use:
-
-+-------------+-------------------------------+--------------------+
-|             | small table                   | large table        |
-+-------------+-------------------------------+--------------------+
-| short entry | `simple or grid table`_       | `grid table`_      |
-+-------------+-------------------------------+--------------------+
-| long entry  | `list table`_                 | `csv table`_       |
-+-------------+-------------------------------+--------------------+
-
-For more information, see `rst tables <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#tables>`_.
-
-.. _`simple or grid table`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#tables
-.. _`grid table`: https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#grid-tables
-.. _`list table`: https://docutils.sourceforge.io/docs/ref/rst/directives.html#list-table
-.. _`csv table`: https://docutils.sourceforge.io/docs/ref/rst/directives.html#csv-table-1
-
-Function arguments
-^^^^^^^^^^^^^^^^^^
-
-Function arguments and keywords within docstrings should be referred to using
-the ``*emphasis*`` role. This will keep Matplotlib's documentation consistent
-with Python's documentation:
-
-.. code-block:: rst
-
-  Here is a description of *argument*
-
-Do not use the ```default role```:
-
-.. code-block:: rst
-
-   Do not describe `argument` like this.  As per the next section,
-   this syntax will (unsuccessfully) attempt to resolve the argument as a
-   link to a class or method in the library.
-
-nor the ````literal```` role:
-
-.. code-block:: rst
-
-   Do not describe ``argument`` like this.
-
-
-Mathematical expressions
-------------------------
-Use sphinx's built in math support:
-
-- **Inline math:** Use the ``:math:``
-  `role <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#math>`__
-- **Math blocks:** Use the ``.. math::``
-  `directive <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#math>`__
-
-In rare cases we want the rendering of the mathematical text in the
-documentation html to exactly match with the rendering of the mathematical
-expression in the Matplotlib figure. In these cases, you can use the
-`matplotlib.sphinxext.mathmpl` Sphinx extension (See also the
-:doc:`../users/explain/text/mathtext` tutorial.)
-
+You can find additional information and conventions how ReST is used in the
+Matplotlib documentation in the :doc:`Matplotlib Documentation style guide <style_guide>`.
 
 .. _internal-section-refs:
 
@@ -420,6 +184,70 @@ Note that the python script that generates the plot is referred to, rather than
 any plot that is created.  Sphinx-gallery will provide the correct reference
 when the documentation is built.
 
+Lists
+-----
+
+Bulleted lists are for items that do not require sequencing. Numbered lists are
+exclusively for performing actions in a determined order.
+
+.. table::
+   :width: 100%
+   :widths: 50, 50
+
+   +------------------------------------+------------------------------------+
+   | Correct                            | Incorrect                          |
+   +====================================+====================================+
+   | The example uses three graphs.     | The example uses three graphs.     |
+   +------------------------------------+------------------------------------+
+   | - Bar                              | 1. Bar                             |
+   | - Line                             | 2. Line                            |
+   | - Pie                              | 3. Pie                             |
+   +------------------------------------+------------------------------------+
+   | These four steps help to get       | The following steps are important  |
+   | started using Matplotlib.          | to get started using Matplotlib.   |
+   +------------------------------------+------------------------------------+
+   |  1. Import the Matplotlib library. |  - Import the Matplotlib library.  |
+   |  2. Import the necessary modules.  |  - Import the necessary modules.   |
+   |  3. Set and assign data to work on.|  - Set and assign data to work on. |
+   |  4. Transform data with methods and|  - Transform data with methods and |
+   |     functions.                     |    functions.                      |
+   +------------------------------------+------------------------------------+
+
+Tables
+------
+Use ASCII tables with reStructuredText standards in organizing content.
+Given the size of the table and length of each entry, use:
+
++-------------+-------------------------------+--------------------+
+|             | small table                   | large table        |
++-------------+-------------------------------+--------------------+
+| short entry | `simple or grid table`_       | `grid table`_      |
++-------------+-------------------------------+--------------------+
+| long entry  | `list table`_                 | `csv table`_       |
++-------------+-------------------------------+--------------------+
+
+For more information, see `rst tables <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#tables>`_.
+
+.. _`simple or grid table`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#tables
+.. _`grid table`: https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#grid-tables
+.. _`list table`: https://docutils.sourceforge.io/docs/ref/rst/directives.html#list-table
+.. _`csv table`: https://docutils.sourceforge.io/docs/ref/rst/directives.html#csv-table-1
+
+Mathematical expressions
+------------------------
+Use Sphinx's built in math support:
+
+- **Inline math:** Use the ``:math:``
+  `role <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#math>`__
+- **Math blocks:** Use the ``.. math::``
+  `directive <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#math>`__
+
+In rare cases we want the rendering of the mathematical text in the
+documentation html to exactly match with the rendering of the mathematical
+expression in the Matplotlib figure. In these cases, you can use the
+`matplotlib.sphinxext.mathmpl` Sphinx extension (See also the
+:doc:`../users/explain/text/mathtext` tutorial.)
+
 Move documentation
 ------------------
 Sometimes it is desirable to move or consolidate documentation.  With no
@@ -525,213 +353,8 @@ See the `~.Axes.hlines` documentation for how this renders.
 The Sphinx_ website also contains plenty of documentation_ concerning ReST
 markup and working with Sphinx in general.
 
-Formatting conventions
-----------------------
-
-The basic docstring conventions are covered in the `numpydoc docstring guide`_
-and the Sphinx_ documentation.  Some Matplotlib-specific formatting conventions
-to keep in mind:
-
-Quote positions
-^^^^^^^^^^^^^^^
-
-The quotes for single line docstrings are on the same line (pydocstyle D200)::
-
-    def get_linewidth(self):
-        """Return the line width in points."""
-
-The quotes for multi-line docstrings are on separate lines (pydocstyle D213)::
-
-        def set_linestyle(self, ls):
-        """
-        Set the linestyle of the line.
-
-        [...]
-        """
-
-Function arguments
-^^^^^^^^^^^^^^^^^^
-
-Function arguments and keywords within docstrings should be referred to
-using the ``*emphasis*`` role. This will keep Matplotlib's documentation
-consistent with Python's documentation:
-
-.. code-block:: rst
-
-  If *linestyles* is *None*, the default is 'solid'.
-
-Do not use the ```default role``` or the ````literal```` role:
-
-.. code-block:: rst
-
-  Neither `argument` nor ``argument`` should be used.
-
-
-Quotes for strings
-^^^^^^^^^^^^^^^^^^
-
-Matplotlib does not have a convention whether to use single-quotes or
-double-quotes.  There is a mixture of both in the current code.
-
-Use simple single or double quotes when giving string values, e.g.
-
-.. code-block:: rst
-
-  If 'tight', try to figure out the tight bbox of the figure.
-
-  No ``'extra'`` literal quotes.
-
-The use of extra literal quotes around the text is discouraged. While they
-slightly improve the rendered docs, they are cumbersome to type and difficult
-to read in plain-text docs.
-
-Parameter type descriptions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The main goal for parameter type descriptions is to be readable and
-understandable by humans. If the possible types are too complex use a
-simplification for the type description and explain the type more
-precisely in the text.
-
-We do not use formal type annotation syntax for type descriptions in
-docstrings; e.g. we use ``list of str`` rather than  ``list[str]``; we
-use ``int or str`` rather than ``int | str`` or ``Union[int, str]``.
-
-Generally, the `numpydoc docstring guide`_ conventions apply. The following
-rules expand on them where the numpydoc conventions are not specific.
-
-Use ``float`` for a type that can be any number.
-
-Use ``(float, float)`` to describe a 2D position. The parentheses should be
-included to make the tuple-ness more obvious.
-
-Use ``array-like`` for homogeneous numeric sequences, which could
-typically be a numpy.array. Dimensionality may be specified using ``2D``,
-``3D``, ``n-dimensional``. If you need to have variables denoting the
-sizes of the dimensions, use capital letters in brackets
-(``(M, N) array-like``). When referring to them in the text they are easier
-read and no special formatting is needed. Use ``array`` instead of
-``array-like`` for return types if the returned object is indeed a numpy array.
-
-``float`` is the implicit default dtype for array-likes. For other dtypes
-use ``array-like of int``.
-
-Some possible uses::
-
-  2D array-like
-  (N,) array-like
-  (M, N) array-like
-  (M, N, 3) array-like
-  array-like of int
-
-Non-numeric homogeneous sequences are described as lists, e.g.::
-
-  list of str
-  list of `.Artist`
-
-Reference types
-^^^^^^^^^^^^^^^
-
-Generally, the rules from referring-to-other-code_ apply. More specifically:
-
-Use full references ```~matplotlib.colors.Normalize``` with an
-abbreviation tilde in parameter types. While the full name helps the
-reader of plain text docstrings, the HTML does not need to show the full
-name as it links to it. Hence, the ``~``-shortening keeps it more readable.
-
-Use abbreviated links ```.Normalize``` in the text.
-
-.. code-block:: rst
-
-   norm : `~matplotlib.colors.Normalize`, optional
-        A `.Normalize` instance is used to scale luminance data to 0, 1.
-
-Default values
-^^^^^^^^^^^^^^
-
-As opposed to the numpydoc guide, parameters need not be marked as
-*optional* if they have a simple default:
-
-- use ``{name} : {type}, default: {val}`` when possible.
-- use ``{name} : {type}, optional`` and describe the default in the text if
-  it cannot be explained sufficiently in the recommended manner.
-
-The default value should provide semantic information targeted at a human
-reader. In simple cases, it restates the value in the function signature.
-If applicable, units should be added.
-
-.. code-block:: rst
-
-   Prefer:
-       interval : int, default: 1000ms
-   over:
-       interval : int, default: 1000
-
-If *None* is only used as a sentinel value for "parameter not specified", do
-not document it as the default. Depending on the context, give the actual
-default, or mark the parameter as optional if not specifying has no particular
-effect.
-
-.. code-block:: rst
-
-   Prefer:
-       dpi : float, default: :rc:`figure.dpi`
-   over:
-       dpi : float, default: None
-
-   Prefer:
-       textprops : dict, optional
-           Dictionary of keyword parameters to be passed to the
-           `~matplotlib.text.Text` instance contained inside TextArea.
-   over:
-       textprops : dict, default: None
-           Dictionary of keyword parameters to be passed to the
-           `~matplotlib.text.Text` instance contained inside TextArea.
-
-
-``See also`` sections
-^^^^^^^^^^^^^^^^^^^^^
-
-Sphinx automatically links code elements in the definition blocks of ``See
-also`` sections. No need to use backticks there::
-
-   See Also
-   --------
-   vlines : vertical lines
-   axhline : horizontal line across the Axes
-
-Wrap parameter lists
-^^^^^^^^^^^^^^^^^^^^
-
-Long parameter lists should be wrapped using a ``\`` for continuation and
-starting on the new line without any indent (no indent because pydoc will
-parse the docstring and strip the line continuation so that indent would
-result in a lot of whitespace within the line):
-
-.. code-block:: python
-
-  def add_axes(self, *args, **kwargs):
-      """
-      ...
-
-      Parameters
-      ----------
-      projection : {'aitoff', 'hammer', 'lambert', 'mollweide', 'polar', \
-  'rectilinear'}, optional
-          The projection type of the axes.
-
-      ...
-      """
-
-Alternatively, you can describe the valid parameter values in a dedicated
-section of the docstring.
-
-rcParams
-^^^^^^^^
-
-rcParams can be referenced with the custom ``:rc:`` role:
-:literal:`:rc:\`foo\`` yields ``rcParams["foo"] = 'default'``, which is a link
-to the :file:`matplotlibrc` file description.
+You can find detailed formatting guidelines for docstrings in our
+:ref:`style guide <docstring_formatting>`.
 
 Setters and getters
 -------------------
@@ -929,6 +552,17 @@ Plots can also be directly placed inside docstrings.  Details are in
 An advantage of this style over referencing an example script is that the
 code will also appear in interactive docstrings.
 
+``See also`` sections
+---------------------
+
+Sphinx automatically links code elements in the definition blocks of ``See
+also`` sections. No need to use backticks there::
+
+   See Also
+   --------
+   vlines : vertical lines
+   axhline : horizontal line across the Axes
+
 .. _inheritance-diagrams:
 
 Generate inheritance diagrams
@@ -978,7 +612,6 @@ these ``*.rst`` files from the source location to the build location (see
 
 In the Python files, to exclude an example from having a plot generated, insert
 "sgskip" somewhere in the filename.
-
 
 The format of these files is relatively straightforward.  Properly
 formatted comment blocks are treated as ReST_ text, the code is
@@ -1113,6 +746,13 @@ in the desired order, with an optional '*' to indicate where not-listed examples
 placed. If '*' is not present, all examples must be listed, or an error will be raised.
 Use this if you want to ensure that a full order is intentionally maintained.
 
+Tags
+----
+
+Gallery examples can have one or more *tags*, which are used to organize the
+gallery and allow users to filter examples by tag. See
+:ref:`document-tag-guidelines` for more details.
+
 .. _raw_restructured_gallery:
 
 Raw restructured text files in the gallery
@@ -1221,11 +861,12 @@ Analytics of our hosted documentation https://matplotlib.org is available at
 https://views.scientific-python.org/matplotlib.org.
 
 
+
 .. _ReST: https://docutils.sourceforge.io/rst.html
 .. _Sphinx: http://www.sphinx-doc.org
+.. _`Sphinx Gallery`: https://sphinx-gallery.readthedocs.io/en/latest/
 .. _documentation: https://www.sphinx-doc.org/en/master/contents.html
 .. _index: http://www.sphinx-doc.org/markup/para.html#index-generating-markup
-.. _`Sphinx Gallery`: https://sphinx-gallery.readthedocs.io/en/latest/
 .. _references: https://www.sphinx-doc.org/en/stable/usage/restructuredtext/roles.html
 .. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html
 .. _`Manually passing files`: https://sphinx-gallery.github.io/stable/configuration.html#manually-passing-files
