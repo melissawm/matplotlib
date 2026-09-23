@@ -27,6 +27,8 @@ why you did it, we recommend the following:
   Matplotlib developers can give feedback and eventually include your suggested
   code into the ``main`` branch.
 
+.. _git-overview:
+
 Overview
 --------
 
@@ -50,98 +52,6 @@ workflow is:
 
      git push -u origin my-new-feature
 
-
-.. _update-mirror-main:
-
-Update the ``main`` branch
-==========================
-
-First make sure you have followed :ref:`installing_for_devs`.
-
-From time to time you should fetch the upstream changes from GitHub::
-
-   git fetch upstream
-
-This will pull down any commits you don't have, and set the remote branches to
-point to the right commit.
-
-.. _make-feature-branch:
-
-Make a new feature branch
-=========================
-
-When you are ready to make some changes to the code, you should start a new
-branch.  Branches that are for a collection of related edits are often called
-'feature branches'. Making a new branch for each set of related changes will make it
-easier for someone reviewing your branch to see what you are doing.
-
-Choose an informative name for the branch to remind yourself and the rest of us
-what the changes in the branch are for.  For example ``add-ability-to-fly``, or
-``bugfix-for-issue-42``.
-
-The process for creating a new feature branch is::
-
-    # Update the main branch
-    git fetch upstream
-    # Make new feature branch starting at current main
-    git branch my-new-feature upstream/main
-    git checkout my-new-feature
-
-If you started making changes on your local ``main`` branch, you can convert the
-branch to a feature branch by renaming it::
-
-   git branch -m <newname>
-
-Generally, you will want to keep your feature branches on your public GitHub
-fork of Matplotlib.  To do this, you ``git push`` this new branch up to your
-GitHub repo.  Generally, if you followed the instructions in these pages, and by
-default, git will have a link to your fork of the GitHub repo, called
-``origin``.  You push up to your own fork with::
-
-   git push origin my-new-feature
-
-
-.. _edit-flow:
-
-The editing workflow
-====================
-
-#. Make some changes
-#. Save the changes
-#. See which files have changed with ``git status``.
-   You'll see a listing like this one:
-
-   .. code-block:: none
-
-     # On branch ny-new-feature
-     # Changed but not updated:
-     #   (use "git add <file>..." to update what will be committed)
-     #   (use "git checkout -- <file>..." to discard changes in working directory)
-     #
-     #	modified:   README
-     #
-     # Untracked files:
-     #   (use "git add <file>..." to include in what will be committed)
-     #
-     #	INSTALL
-     no changes added to commit (use "git add" and/or "git commit -a")
-
-#. Check what the actual changes are with ``git diff``.
-#. Add any new files to version control ``git add new_file_name``.
-#. To commit **all** modified files into the local copy of your repo, type:
-
-   .. code-block:: bash
-
-      git commit -am 'A commit message'
-
-   Note the ``-am`` options to ``commit``. The ``m`` flag signals that you are
-   going to type a message on the command line.  The ``a`` flag stages every
-   file that has been modified, except files listed in ``.gitignore``. For more
-   information, see the `git commit <https://git-scm.com/docs/git-commit>`_  manual page.
-#. To push the changes up to your forked repo on GitHub, do a ``git
-   push``.
-
-
 Verify your changes
 ===================
 
@@ -156,7 +66,7 @@ Check that your change does what you intend.  For code changes:
 
 For documentation changes, build the documentation locally to check that
 it renders how you intended and that any new links work correctly.  See
-:ref:`build_docs`.
+:ref:`document-build`.
 
 This is also a good time to look through the :ref:`pr-author-guidelines` and
 address as many of the relevant points as you can.
@@ -219,8 +129,9 @@ Manage commit history
 Explore your repository
 -----------------------
 
-To see a graphical representation of the repository branches and
-commits::
+Most coding IDEs have built-in tools to see a graphical representation of the
+repository branches and commits. If you prefer using a built-in tool, you can
+use::
 
    gitk --all
 
