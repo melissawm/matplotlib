@@ -15,11 +15,11 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: j178/prek-action@4e14d07f9231acabce116ccfca13b13dd9755ece  # v3.0.0
+      - uses: j178/prek-action@44924fe9ef4a6f88253c4b6b1bf11c689d3ce53d  # v3.1.0
         with:
           extra-args: --hook-stage manual --all-files --skip oxipng
       # Only run oxipng on the last diff, because we haven't updated all images.
-      - uses: j178/prek-action@4e14d07f9231acabce116ccfca13b13dd9755ece  # v3.0.0
+      - uses: j178/prek-action@44924fe9ef4a6f88253c4b6b1bf11c689d3ce53d  # v3.1.0
         with:
           extra-args: --hook-stage manual --from-ref origin/${{ github.base_ref }} oxipng
 
@@ -128,7 +128,7 @@ jobs:
           persist-credentials: false
 
       - name: eslint
-        uses: reviewdog/action-eslint@556a3fdaf8b4201d4d74d406013386aa4f7dab96  # v1.34.0
+        uses: reviewdog/action-eslint@3ee2a450da17e060b9dfa4bffd53976906c6b2b0  # v1.36.1
         with:
           filter_mode: nofilter
           github_token: ${{ secrets.GITHUB_TOKEN }}
