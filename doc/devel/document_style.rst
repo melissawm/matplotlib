@@ -1,7 +1,10 @@
+.. redirect-from:: /devel/style_guide
 
-=========================
-Documentation style guide
-=========================
+.. _document_style:
+
+***********
+Style guide
+***********
 
 This guide contains best practices for the language and formatting of Matplotlib
 documentation.
@@ -178,7 +181,23 @@ reliability and consistency in documentation. They are not interchangeable.
 
 Headings
 --------
-Use sentence case for headings.
+We aim to follow the recommendations from the
+`Python documentation <https://devguide.python.org/documenting/#sections>`_
+and the `Sphinx reStructuredText documentation <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#sections>`_
+for section markup characters, i.e.:
+
+- ``#`` with overline, for parts. This is reserved for the main title in
+  ``index.rst``. All other pages should start with "chapter" or lower.
+- ``*`` with overline, for chapters
+- ``=``, for sections
+- ``-``, for subsections
+- ``^``, for subsubsections
+- ``"``, for paragraphs
+
+This may not yet be applied consistently in existing docs.
+
+Use `sentence case <https://apastyle.apa.org/style-grammar-guidelines/capitalization/sentence-case>`__
+``Upper lower`` for section titles.
 
 .. table::
    :width: 100%
@@ -316,17 +335,12 @@ subordinating conjunctive phrases.
 Formatting
 ==========
 
-The following guidelines specify how to incorporate code and use appropriate
+It is useful to strive for consistency in the Matplotlib documentation. The
+following guidelines specify how to incorporate code and use appropriate
 formatting for Matplotlib documentation.
 
-Code
-----
-
-Matplotlib is a Python library and follows the same standards for
-documentation.
-
-Comments
-^^^^^^^^
+Code examples
+-------------
 Examples of Python code have comments before or on the same line.
 
 .. table::
@@ -347,7 +361,7 @@ Examples of Python code have comments before or on the same line.
    +---------------------------------------+---------------------------------+
 
 Outputs
-^^^^^^^
+-------
 When generating visuals with Matplotlib using ``.py`` files in examples,
 display the visual with `matplotlib.pyplot.show` to display the visual.
 Keep the documentation clear of Python output lines.
@@ -371,82 +385,205 @@ Keep the documentation clear of Python output lines.
    |    fig.show()                      |                                    |
    +------------------------------------+------------------------------------+
 
-reStructuredText
-----------------
+.. _docstring_formatting:
 
-Matplotlib uses reStructuredText Markup for documentation. Sphinx helps to
-transform these documents into appropriate formats for accessibility and
-visibility.
+Docstring formatting conventions
+--------------------------------
 
-- `reStructuredText Specifications <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`_
-- `Quick Reference Document <https://docutils.sourceforge.io/docs/user/rst/quickref.html>`_
+The basic docstring conventions are covered in the `numpydoc docstring guide`_
+and the Sphinx_ documentation.  Some Matplotlib-specific formatting conventions
+to keep in mind:
 
+.. _`numpydoc docstring guide`: https://numpydoc.readthedocs.io/en/latest/format.html
+.. _Sphinx: http://www.sphinx-doc.org
 
-Lists
-^^^^^
-Bulleted lists are for items that do not require sequencing. Numbered lists are
-exclusively for performing actions in a determined order.
+Quote positions
+^^^^^^^^^^^^^^^
 
-.. table::
-   :width: 100%
-   :widths: 50, 50
+The quotes for single line docstrings are on the same line (pydocstyle D200)::
 
-   +------------------------------------+------------------------------------+
-   | Correct                            | Incorrect                          |
-   +====================================+====================================+
-   | The example uses three graphs.     | The example uses three graphs.     |
-   +------------------------------------+------------------------------------+
-   | - Bar                              | 1. Bar                             |
-   | - Line                             | 2. Line                            |
-   | - Pie                              | 3. Pie                             |
-   +------------------------------------+------------------------------------+
-   | These four steps help to get       | The following steps are important  |
-   | started using Matplotlib.          | to get started using Matplotlib.   |
-   +------------------------------------+------------------------------------+
-   |  1. Import the Matplotlib library. |  - Import the Matplotlib library.  |
-   |  2. Import the necessary modules.  |  - Import the necessary modules.   |
-   |  3. Set and assign data to work on.|  - Set and assign data to work on. |
-   |  4. Transform data with methods and|  - Transform data with methods and |
-   |     functions.                     |    functions.                      |
-   +------------------------------------+------------------------------------+
+    def get_linewidth(self):
+        """Return the line width in points."""
 
-Tables
-^^^^^^
-Use ASCII tables with reStructuredText standards in organizing content.
-Markdown tables and the csv-table directive are not accepted.
+The quotes for multi-line docstrings are on separate lines (pydocstyle D213)::
 
-.. table::
-   :width: 100%
-   :widths: 50, 50
+        def set_linestyle(self, ls):
+        """
+        Set the linestyle of the line.
 
-   +--------------------------------+----------------------------------------+
-   | Correct                        | Incorrect                              |
-   +================================+========================================+
-   | +----------+----------+        | ::                                     |
-   | | Correct  | Incorrect|        |                                        |
-   | +==========+==========+        |     | Correct | Incorrect |            |
-   | | OK       | Not OK   |        |     | ------- | --------- |            |
-   | +----------+----------+        |     | OK      | Not OK    |            |
-   |                                |                                        |
-   +--------------------------------+----------------------------------------+
-   | ::                             | ::                                     |
-   |                                |                                        |
-   |     +----------+----------+    |     .. csv-table::                     |
-   |     | Correct  | Incorrect|    |        :header: "correct", "incorrect" |
-   |     +==========+==========+    |        :widths: 10, 10                 |
-   |     | OK       | Not OK   |    |                                        |
-   |     +----------+----------+    |        "OK   ", "Not OK"               |
-   |                                |                                        |
-   +--------------------------------+                                        |
-   | ::                             |                                        |
-   |                                |                                        |
-   |     ===========  ===========   |                                        |
-   |       Correct     Incorrect    |                                        |
-   |     ===========  ===========   |                                        |
-   |     OK           Not OK        |                                        |
-   |     ===========  ===========   |                                        |
-   |                                |                                        |
-   +--------------------------------+----------------------------------------+
+        [...]
+        """
+
+Function arguments
+^^^^^^^^^^^^^^^^^^
+
+Function arguments and keywords within docstrings should be referred to
+using the ``*emphasis*`` role. This will keep Matplotlib's documentation
+consistent with Python's documentation:
+
+.. code-block:: rst
+
+  If *linestyles* is *None*, the default is 'solid'.
+
+Do not use the ```default role``` or the ````literal```` role:
+
+.. code-block:: rst
+
+  Neither `argument` nor ``argument`` should be used.
+
+Quotes for strings
+^^^^^^^^^^^^^^^^^^
+
+Matplotlib does not have a convention whether to use single-quotes or
+double-quotes.  There is a mixture of both in the current code.
+
+Use simple single or double quotes when giving string values, e.g.
+
+.. code-block:: rst
+
+  If 'tight', try to figure out the tight bbox of the figure.
+
+  No ``'extra'`` literal quotes.
+
+The use of extra literal quotes around the text is discouraged. While they
+slightly improve the rendered docs, they are cumbersome to type and difficult
+to read in plain-text docs.
+
+Parameter type descriptions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The main goal for parameter type descriptions is to be readable and
+understandable by humans. If the possible types are too complex use a
+simplification for the type description and explain the type more
+precisely in the text.
+
+We do not use formal type annotation syntax for type descriptions in
+docstrings; e.g. we use ``list of str`` rather than  ``list[str]``; we
+use ``int or str`` rather than ``int | str`` or ``Union[int, str]``.
+
+Generally, the `numpydoc docstring guide`_ conventions apply. The following
+rules expand on them where the numpydoc conventions are not specific.
+
+Use ``float`` for a type that can be any number.
+
+Use ``(float, float)`` to describe a 2D position. The parentheses should be
+included to make the tuple-ness more obvious.
+
+Use ``array-like`` for homogeneous numeric sequences, which could
+typically be a numpy.array. Dimensionality may be specified using ``2D``,
+``3D``, ``n-dimensional``. If you need to have variables denoting the
+sizes of the dimensions, use capital letters in brackets
+(``(M, N) array-like``). When referring to them in the text they are easier
+read and no special formatting is needed. Use ``array`` instead of
+``array-like`` for return types if the returned object is indeed a numpy array.
+
+``float`` is the implicit default dtype for array-likes. For other dtypes
+use ``array-like of int``.
+
+Some possible uses::
+
+  2D array-like
+  (N,) array-like
+  (M, N) array-like
+  (M, N, 3) array-like
+  array-like of int
+
+Non-numeric homogeneous sequences are described as lists, e.g.::
+
+  list of str
+  list of `.Artist`
+
+Reference types
+^^^^^^^^^^^^^^^
+
+Generally, the rules from :ref:`referring-to-other-code` apply. More specifically:
+
+Use full references ```~matplotlib.colors.Normalize``` with an
+abbreviation tilde in parameter types. While the full name helps the
+reader of plain text docstrings, the HTML does not need to show the full
+name as it links to it. Hence, the ``~``-shortening keeps it more readable.
+
+Use abbreviated links ```.Normalize``` in the text.
+
+.. code-block:: rst
+
+   norm : `~matplotlib.colors.Normalize`, optional
+        A `.Normalize` instance is used to scale luminance data to 0, 1.
+
+Default values
+^^^^^^^^^^^^^^
+
+As opposed to the numpydoc guide, parameters need not be marked as
+*optional* if they have a simple default:
+
+- use ``{name} : {type}, default: {val}`` when possible.
+- use ``{name} : {type}, optional`` and describe the default in the text if
+  it cannot be explained sufficiently in the recommended manner.
+
+The default value should provide semantic information targeted at a human
+reader. In simple cases, it restates the value in the function signature.
+If applicable, units should be added.
+
+.. code-block:: rst
+
+   Prefer:
+       interval : int, default: 1000ms
+   over:
+       interval : int, default: 1000
+
+If *None* is only used as a sentinel value for "parameter not specified", do
+not document it as the default. Depending on the context, give the actual
+default, or mark the parameter as optional if not specifying has no particular
+effect.
+
+.. code-block:: rst
+
+   Prefer:
+       dpi : float, default: :rc:`figure.dpi`
+   over:
+       dpi : float, default: None
+
+   Prefer:
+       textprops : dict, optional
+           Dictionary of keyword parameters to be passed to the
+           `~matplotlib.text.Text` instance contained inside TextArea.
+   over:
+       textprops : dict, default: None
+           Dictionary of keyword parameters to be passed to the
+           `~matplotlib.text.Text` instance contained inside TextArea.
+
+Wrap parameter lists
+^^^^^^^^^^^^^^^^^^^^
+
+Long parameter lists should be wrapped using a ``\`` for continuation and
+starting on the new line without any indent (no indent because pydoc will
+parse the docstring and strip the line continuation so that indent would
+result in a lot of whitespace within the line):
+
+.. code-block:: python
+
+  def add_axes(self, *args, **kwargs):
+      """
+      ...
+
+      Parameters
+      ----------
+      projection : {'aitoff', 'hammer', 'lambert', 'mollweide', 'polar', \
+  'rectilinear'}, optional
+          The projection type of the axes.
+
+      ...
+      """
+
+Alternatively, you can describe the valid parameter values in a dedicated
+section of the docstring.
+
+rcParams
+^^^^^^^^
+
+rcParams can be referenced with the custom ``:rc:`` role:
+:literal:`:rc:\`foo\`` yields ``rcParams["foo"] = 'default'``, which is a link
+to the :file:`matplotlibrc` file description.
 
 
 Additional resources
@@ -454,6 +591,7 @@ Additional resources
 This style guide is not a comprehensive standard. For a more thorough
 reference of how to contribute to documentation, see the links below. These
 resources contain common best practices for writing documentation.
+
 
 * `Python Developer's Guide <https://devguide.python.org/documenting/#documenting-python>`_
 * `Google Developer Style Guide <https://developers.google.com/style>`_

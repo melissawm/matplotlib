@@ -66,7 +66,7 @@ Test and documentation dependencies
 As these packages are only needed for testing or building the docs and
 not needed by end-users, we can be more aggressive about dropping
 support for old versions.  However, we need to be careful to not
-over-run what down-stream packagers support (as most of the run the
+over-run what down-stream packagers support (as most of them run the
 tests and build the documentation as part of the packaging process).
 
 We will support at least minor versions of the development dependencies
@@ -167,7 +167,7 @@ To update the minimum versions of Python we need to update:
 - ``environment.yml``
 - ``doc/install/dependencies.rst``
 - ``doc/devel/min_dep_policy.rst`` (this file)
-- CI configuration files (circle, GHA, azure)
+- CI configuration files (circle, GHA)
 - ``tox.ini``
 
 To update the minimum NumPy we need to update:

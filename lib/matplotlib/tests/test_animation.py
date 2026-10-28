@@ -13,7 +13,7 @@ import pytest
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 from matplotlib import animation
-from matplotlib.animation import PillowWriter
+from matplotlib.animation import PillowWriter, FuncAnimation
 from matplotlib.testing.decorators import check_figures_equal
 
 
@@ -146,6 +146,20 @@ def test_movie_writer_dpi_default():
     writer = DummyMovieWriter(fps, codec, bitrate, extra_args)
     writer.setup(fig, filename)
     assert writer.dpi == fig.dpi
+
+
+def test_movie_writer_args_not_implemented():
+    # MovieWriter._args is a placeholder that subclasses must override; it
+    # must *raise* NotImplementedError rather than merely returning it, so a
+    # subclass that forgets to override it fails loudly instead of passing an
+    # exception instance on as if it were the command-line arguments.
+    class IncorrectMovieWriter(animation.MovieWriter):
+        pass
+
+    writer = IncorrectMovieWriter()
+    with pytest.raises(NotImplementedError,
+                       match="args needs to be implemented by subclass"):
+        writer._args()
 
 
 @animation.writers.register('null')
@@ -281,6 +295,22 @@ def test_animation_repr_html(writer, html, want, anim):
             np.testing.break_cycles()
     else:
         assert want in html
+
+
+@pytest.mark.parametrize('writer, want', [
+    pytest.param(
+        'ffmpeg', '<video width',
+        marks=pytest.mark.skipif(not animation.FFMpegWriter.isAvailable(),
+                                 reason='Requires FFMpeg')),
+    pytest.param('jshtml', '<script '),
+])
+@pytest.mark.parametrize('anim', [{}], indirect=['anim'])
+def test_animation_repr_html_auto(writer, want, anim, monkeypatch):
+    monkeypatch.setattr('matplotlib.animation.writers.is_available',
+                        lambda name: name == writer)
+    with plt.rc_context({'animation.html': 'auto'}):
+        html = anim._repr_html_()
+    assert want in html
 
 
 @pytest.mark.parametrize(
@@ -571,3 +601,35 @@ def test_animation_with_transparency():
     # Check that the alpha channel is not 255, so frame has transparency
     assert frame.getextrema()[3][0] < 255
     plt.close(fig)
+
+
+def test_event_source_stops_leaves_event():
+    """
+    Added for issue #30622
+
+    Tests that animations now stop the event source
+    on animation completion.
+    """
+    fig, ax = plt.subplots()
+    anim = FuncAnimation(fig, lambda f: [], frames=3, repeat=False)
+    anim._start()
+    while anim._step():
+        pass  # goes through all 3 steps
+    assert anim.event_source is not None
+
+
+def test_event_source_stops_early_leaves_event():
+    """
+    Added for issue #30622
+
+    Tests that animations now stop the event source instead
+    of destroying it on animation early stop.
+    """
+    fig, ax = plt.subplots()
+    anim = FuncAnimation(fig, lambda f: [], frames=3)
+    anim._start()
+    # plt.close(fig) is needed here because, without it, stop
+    # is not called. So, event_source would still be not None
+    # and that is not the behaviour we are exercising.
+    plt.close(fig)
+    assert anim.event_source is not None

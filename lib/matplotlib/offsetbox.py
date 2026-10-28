@@ -909,10 +909,14 @@ class AnchoredOffsetbox(OffsetBox):
     """
     An OffsetBox placed according to location *loc*.
 
-    AnchoredOffsetbox has a single child.  When multiple children are needed,
-    use an extra OffsetBox to enclose them.  By default, the offset box is
-    anchored against its parent Axes. You may explicitly specify the
-    *bbox_to_anchor*.
+    AnchoredOffsetbox has a single child.  When multiple children are needed, use an
+    extra OffsetBox to enclose them.  By default, the offset box is anchored against its
+    parent Axes, SubFigure or Figure. You may explicitly specify the *bbox_to_anchor*.
+
+    .. versionadded:: 3.12
+       `.AnchoredOffsetbox` can now be added directly to a `.Figure` or `.SubFigure`,
+       and will by default be anchored to that parent.
+
     """
     zorder = 5  # zorder of the legend
 
@@ -1024,7 +1028,8 @@ class AnchoredOffsetbox(OffsetBox):
     def get_bbox_to_anchor(self):
         """Return the bbox that the box is anchored to."""
         if self._bbox_to_anchor is None:
-            return self.axes.bbox
+            return (self.axes.bbox if self.axes is not None else
+                    self.get_figure(root=False).bbox)
         else:
             transform = self._bbox_to_anchor_transform
             if transform is None:
@@ -1164,7 +1169,7 @@ class OffsetImage(OffsetBox):
 
     Parameters
     ----------
-    arr: array-like or `PIL.Image.Image`
+    arr : array-like or `PIL.Image.Image`
         The data to be color-coded. The interpretation depends on the
         shape:
 
@@ -1172,7 +1177,7 @@ class OffsetImage(OffsetBox):
         - (M, N, 3): RGB array
         - (M, N, 4): RGBA array
 
-    zoom: float, default: 1
+    zoom : float, default: 1
         zoom factor:
 
         - no zoom: factor =1
@@ -1214,7 +1219,7 @@ class OffsetImage(OffsetBox):
         When True, use a full resampling method. When False, only resample when
         the output image is larger than the input image.
 
-    dpi_cor: bool, default: True
+    dpi_cor : bool, default: True
         Correct for the backend DPI setting
 
     **kwargs : `.BboxImage` properties
@@ -1339,7 +1344,7 @@ or callable, default: value of *xycoords*
             (accessible as the ``patch`` attribute of the `.AnnotationBbox`).
             If *frameon* is set to False, this patch is made invisible.
 
-        annotation_clip: bool or None, default: None
+        annotation_clip : bool or None, default: None
             Whether to clip (i.e. not draw) the annotation when the annotation
             point *xy* is outside the Axes area.
 
@@ -1362,10 +1367,10 @@ or callable, default: value of *xycoords*
             for example *boxstyle* and *alpha*.  See `.FancyBboxPatch` for
             details.
 
-        arrowprops: dict, optional
+        arrowprops : dict, optional
             Arrow properties, see `.Annotation` for description.
 
-        fontsize: float or str, optional
+        fontsize : float or str, optional
             Translated to points and passed as *mutation_scale* into
             `.FancyBboxPatch` to scale attributes of the box style (e.g. pad
             or rounding_size).  The name is chosen in analogy to `.Text` where

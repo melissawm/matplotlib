@@ -87,8 +87,8 @@ our code consistent and mitigating the impact of changes.
 * :ref:`pr-guidelines`
 
 Code is contributed through pull requests, so we recommend that you start at
-:ref:`how-to-pull-request` If you get stuck, please reach out on the
-:ref:`contributor_incubator`
+:ref:`how-to-pull-request`. If you get stuck, please reach out on the
+:ref:`contributor_incubator`.
 
 .. _contribute_documentation:
 
@@ -104,7 +104,7 @@ you can:
 - Write or update an :ref:`example plot <gallery>`
 - Write or update a comprehensive :ref:`tutorial <tutorials>`
 
-Our code is documented inline in the source code files in :file:`matplotlib/lib`.
+Our code is documented inline in the source code files in :file:`lib/matplotlib`.
 Our website structure mirrors our folder structure, meaning that a narrative
 document's URL roughly corresponds to its location in our folder structure:
 
@@ -113,8 +113,8 @@ document's URL roughly corresponds to its location in our folder structure:
   .. grid-item:: using the library
 
       * :file:`galleries/plot_types/`
-      * :file:`users/getting_started/`
-      * :file:`galleries/user_explain/`
+      * :file:`doc/users/getting_started/`
+      * :file:`galleries/users_explain/`
       * :file:`galleries/tutorials/`
       * :file:`galleries/examples/`
       * :file:`doc/api/`
@@ -133,19 +133,29 @@ Other documentation is generated from the following external sources:
 * matplotlib.org homepage: https://github.com/matplotlib/mpl-brochure-site
 * cheat sheets: https://github.com/matplotlib/cheatsheets
 * third party packages: https://github.com/matplotlib/mpl-third-party
+* Matplotlib custom Sphinx theme: https://github.com/matplotlib/mpl-sphinx-theme
 
 Instructions and guidelines for contributing documentation are found in:
 
-* :doc:`document`
-* :doc:`style_guide`
-* :doc:`tag_guidelines`
+* :doc:`document_build`
+* :doc:`document_format`
+* :doc:`document_style`
+* :doc:`document_tag`
 
 Documentation is contributed through pull requests, so we recommend that you start
 at :ref:`how-to-pull-request`. If that feels intimidating, we encourage you to
 `open an issue`_ describing what improvements you would make. If you get stuck,
-please reach out on the :ref:`contributor_incubator`
+please reach out on the :ref:`contributor_incubator`.
 
 .. _`open an issue`: https://github.com/matplotlib/matplotlib/issues/new?assignees=&labels=Documentation&projects=&template=documentation.yml&title=%5BDoc%5D%3A+
+
+Sphinx Theme
+------------
+
+Matplotlib has a few subprojects that share the same navbar and style, so these
+are centralized as a sphinx theme at
+`mpl_sphinx_theme <https://github.com/matplotlib/mpl-sphinx-theme>`_.  Changes
+to the style or top bar should be made there to propagate across all subprojects.
 
 .. _contribute_triage:
 
@@ -248,7 +258,7 @@ veteran contributors, who are keen to support onboarding of new folks and
 share their experience. You can find our community calendar link at the
 `Scientific Python website <https://scientific-python.org/calendars/>`_, and
 you can browse previous meeting notes on `GitHub
-<https://github.com/matplotlib/ProjectManagement/tree/master/new_contributor_meeting>`_.
+<https://github.com/matplotlib/ProjectManagement/tree/master/new_contributors_meeting>`_.
 We recommend joining the meeting to clarify any doubts, or lingering
 questions you might have, and to get to know a few of the people behind the
 GitHub handles 😉. You can reach out to us on `incubator chat`_ for any

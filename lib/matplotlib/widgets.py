@@ -2502,10 +2502,13 @@ class _SelectorWidget(AxesWidget):
         if not self.ignore(event) and self._eventpress:
             event = self._clean_event(event)
             self._eventrelease = event
-            self._release(event)
-            self._eventpress = None
-            self._eventrelease = None
-            self._state.discard('move')
+            try:
+                self._release(event)
+            finally:
+                # The callback may raise; reset the state regardless.
+                self._eventpress = None
+                self._eventrelease = None
+                self._state.discard('move')
             return True
         return False
 
@@ -4403,7 +4406,7 @@ class Lasso(AxesWidget):
         Whether to use blitting for faster drawing (if supported by the
         backend). See the tutorial :ref:`blitting`
         for details.
-    props: dict, optional
+    props : dict, optional
         Lasso line properties. See `.Line2D` for valid properties.
         Default *props* are::
 

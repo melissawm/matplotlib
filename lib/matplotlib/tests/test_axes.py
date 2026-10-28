@@ -1624,6 +1624,44 @@ def test_pcolor_log_scale(fig_test, fig_ref):
     ax.set_xscale('log')
 
 
+def test_pcolormesh_switching_shadings():
+    nrows, ncols = 3, 4
+    Z = np.arange(nrows * ncols).reshape(nrows, ncols)
+    x = np.arange(ncols + 1)
+    y = np.arange(nrows + 1)
+
+    _, ax = plt.subplots()
+
+    ax.pcolormesh(x, y, Z, shading='flat')
+    ax.pcolormesh(x, y, Z, shading='gouraud')
+    with pytest.raises(TypeError):
+        ax.pcolormesh(x, y, Z, shading='nearest')
+
+    ax.pcolormesh(x[:-1], y[:-1], Z, shading='nearest')
+    ax.pcolormesh(x[:-1], y[:-1], Z, shading='gouraud')
+    with pytest.raises(TypeError):
+        ax.pcolormesh(x[:-1], y[:-1], Z, shading='flat')
+
+
+@check_figures_equal()
+def test_pcolormesh_gouraud_grid_conversion(fig_test, fig_ref):
+    # For X and Y one dimension greater than Z, gouraud converts the
+    # grid representation to match the data shape, by using quad centers.
+    Z = np.arange(6).reshape(2, 3)
+
+    # One larger than Z in each dimension.
+    x_test = np.array([0, 2, 8, 12])
+    y_test = np.array([0, 2, 6])
+    ax_test = fig_test.subplots()
+    ax_test.pcolormesh(x_test, y_test, Z, shading='gouraud')
+
+    # Same shape as Z.
+    x_ref = np.array([1, 5, 10])
+    y_ref = np.array([1, 4])
+    ax_ref = fig_ref.subplots()
+    ax_ref.pcolormesh(x_ref, y_ref, Z, shading='gouraud')
+
+
 def test_pcolorargs():
     n = 12
     x = np.linspace(-1.5, 1.5, n)
@@ -1637,9 +1675,9 @@ def test_pcolorargs():
     with pytest.raises(TypeError):
         ax.pcolormesh(X, Y, Z.T)
     with pytest.raises(TypeError):
-        ax.pcolormesh(x, y, Z[:-1, :-1], shading="gouraud")
+        ax.pcolormesh(x, y, Z[:-2, :-2], shading='gouraud')
     with pytest.raises(TypeError):
-        ax.pcolormesh(X, Y, Z[:-1, :-1], shading="gouraud")
+        ax.pcolormesh(X, Y, Z[:-2, :-2], shading='gouraud')
     x[0] = np.nan
     with pytest.raises(ValueError):
         ax.pcolormesh(x, y, Z[:-1, :-1])
@@ -1678,6 +1716,18 @@ def test_pcolorargs():
         # bad grid warnings.
         ax.pcolormesh(X+10*noise_X, Y+10*noise_Y, Z, shading='auto')
         assert len(record) == 2
+    # Grid cannot contain a single row or single column for nearest shading.
+    x = [1, 2, 3]
+    y = [4]
+    Z = np.arange(3).reshape(1, 3)
+    with pytest.raises(TypeError):
+        ax.pcolormesh(Z, shading='nearest')
+    with pytest.raises(TypeError):
+        ax.pcolormesh(x, y, Z)
+    with pytest.raises(TypeError):
+        ax.pcolormesh(y, x, Z.T)
+    with pytest.raises(TypeError):
+        ax.pcolormesh(y, y, Z[:, [0]])
 
 
 def test_pcolormesh_underflow_error():
@@ -10411,7 +10461,8 @@ def test_bar_shape_mismatch():
     x = ["foo", "bar"]
     height = [1, 2, 3]
     error_message = (
-        r"Mismatch is between 'x' with shape \(2,\) and 'height' with shape \(3,\)"
+        r"bar\(\) failed on broadcasting inputs with the following shapes: "
+        r"x \(2,\), height \(3,\)"
     )
     with pytest.raises(ValueError, match=error_message):
         plt.bar(x, height)

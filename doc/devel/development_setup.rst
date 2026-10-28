@@ -265,8 +265,8 @@ the file you want to open and select "Open with Live Server."
 
 .. _development-install:
 
-Install Matplotlib in editable mode
-===================================
+Install Matplotlib for development
+==================================
 
 Install Matplotlib in editable mode from the :file:`matplotlib` directory using the
 command ::
@@ -277,10 +277,6 @@ The 'editable/develop mode' builds everything and places links in your Python en
 so that Python will be able to import Matplotlib from your development source directory.
 This allows you to import your modified version of Matplotlib without having to
 re-install after changing a ``.py`` or compiled extension file.
-
-When working on a branch that does not have Meson enabled, meaning it does not
-have :ghpull:`26621` in its history (log), you will have to reinstall from source
-each time you change any compiled extension code.
 
 If the installation is not working, please consult the :ref:`troubleshooting guide <troubleshooting-faq>`.
 If the guide does not offer a solution, please reach out via `discourse <https://discourse.matplotlib.org>`_
@@ -321,20 +317,23 @@ you are aware of the existing issues beforehand.
 
 .. _pre-commit-hooks:
 
-Install pre-commit hooks
-========================
+Install git pre-commit hooks
+============================
+
 `prek <https://prek.j178.dev/>`_ hooks save time in the review process by
 identifying issues with the code before a pull request is formally opened. Most
-hooks can also aide in fixing the errors, and the checks should have
+hooks can also aid in fixing the errors, and the checks should have
 corresponding :ref:`development workflow <development-workflow>` and
 :ref:`pull request <pr-guidelines>` guidelines. Hooks are configured in
 `.pre-commit-config.yaml <https://github.com/matplotlib/matplotlib/blob/main/.pre-commit-config.yaml?>`_
-and include checks for spelling and formatting, flake 8 conformity, accidentally
+and include checks for spelling and formatting, style conformity, accidentally
 committed files, import order, and incorrect branching.
 
 Install pre-commit hooks ::
 
-    python -m pip install prek
+    # e.g.
+    # pixi global install prek
+    # uv tool install prek
     prek install
 
 Hooks are run automatically after the ``git commit`` stage of the

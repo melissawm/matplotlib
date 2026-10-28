@@ -2374,7 +2374,7 @@ class Axes(_AxesBase):
 
         facecolor : :mpltype:`color` or list of :mpltype:`color`, optional
             The colors of the bar faces.
-            If both *color* and *facecolor are given, *facecolor* takes precedence.
+            If both *color* and *facecolor* are given, *facecolor* takes precedence.
 
         edgecolor : :mpltype:`color` or list of :mpltype:`color`, optional
             The colors of the bar edges.
@@ -2520,27 +2520,23 @@ class Axes(_AxesBase):
             height = self._convert_dx(height, y0, y, self.convert_yunits)
             if yerr is not None:
                 yerr = self._convert_dx(yerr, y0, y, self.convert_yunits)
+
+        # broadcast all args to make them iterable
+        x = np.atleast_1d(x)
+        args = (x, height, width, y, linewidth, hatch)
+        arg_names = ('x', 'height', 'width', 'y', 'linewidth', 'hatch')
         try:
-            x, height, width, y, linewidth, hatch = np.broadcast_arrays(
-                # Make args iterable too.
-                np.atleast_1d(x), height, width, y, linewidth, hatch
-            )
+            x, height, width, y, linewidth, hatch = np.broadcast_arrays(*args)
         except ValueError as e:
-            arg_map = {
-                "arg 0": "'x'",
-                "arg 1": "'height'",
-                "arg 2": "'width'",
-                "arg 3": "'y'",
-                "arg 4": "'linewidth'",
-                "arg 5": "'hatch'"
-            }
-            error_message = str(e)
-            for arg, name in arg_map.items():
-                error_message = error_message.replace(arg, name)
-            if error_message != str(e):
-                raise ValueError(error_message) from e
-            else:
-                raise
+            non_trivial_inputs = ", ".join(
+                f"{name} {np.shape(arg)}" for arg, name in zip(args, arg_names)
+                # only collect args that could contribute to a broadcast error
+                if any(dim != 1 for dim in np.shape(arg))
+            )
+            raise ValueError(
+                f"bar() failed on broadcasting inputs with the following shapes: "
+                f"{non_trivial_inputs}"
+            ) from e
 
         # Now that units have been converted, set the tick locations.
         if orientation == 'vertical':
@@ -2977,6 +2973,12 @@ class Axes(_AxesBase):
 
         A rectangle is drawn for each element of *xranges*. All rectangles
         have the same vertical position and size defined by *yrange*.
+
+        Note: Rectangles may become invisible if their width is smaller than the
+        resolution of the display. If you expect very narrow rectangles, consider
+        adding an edge with the same color as the facecolor by passing
+        ``edgecolor="face"`. The edge will always be drawn, making narrow rectangles
+        visible.
 
         Parameters
         ----------
@@ -6531,10 +6533,23 @@ or pandas.DataFrame
                                 f" see help({funcname})")
         else:    # ['nearest', 'gouraud']:
             if (Nx, Ny) != (ncols, nrows):
-                raise TypeError('Dimensions of C %s are incompatible with'
-                                ' X (%d) and/or Y (%d); see help(%s)' % (
-                                    C.shape, Nx, Ny, funcname))
+                if shading == 'gouraud' and (Nx, Ny) == (ncols + 1, nrows + 1):
+                    # the center of each quad is the average of its four corners
+                    X = 0.25 * (X[:-1, :-1] + X[:-1, 1:] + X[1:, 1:] + X[1:, :-1])
+                    Y = 0.25 * (Y[:-1, :-1] + Y[:-1, 1:] + Y[1:, 1:] + Y[1:, :-1])
+                else:
+                    raise TypeError(f"Dimensions of C {C.shape} are incompatible with"
+                                    f" X ({Nx}) and/or Y ({Ny}); see help({funcname})")
             if shading == 'nearest':
+                if Nx == 1 or Ny == 1:
+                    # If a coordinate array has a single cell center,
+                    # its corresponding cell size cannot be determined
+                    # from neighboring centers.
+                    raise TypeError(f"C has shape ({nrows}, {ncols}) but "
+                                    "shading='nearest' requires at least two rows "
+                                    "and two columns. Please supply explicit cell "
+                                    "edges for X and Y and use shading='flat' "
+                                    f"with {funcname}.")
                 # grid is specified at the center, so define corners
                 # at the midpoints between the grid centers and then use the
                 # flat algorithm.
@@ -6543,26 +6558,21 @@ or pandas.DataFrame
                     # correctly, when expanding columns, the monotonicity of
                     # X coords needs to be checked. When expanding rows, the
                     # monotonicity of Y coords needs to be checked.
-                    if np.shape(X)[1] > 1:
-                        dX = np.diff(X, axis=1) * 0.5
-                        if (require_monotonicity and
-                                not (np.all(dX >= 0) or np.all(dX <= 0))):
-                            _api.warn_external(
-                                f"The input coordinates to {funcname} are "
-                                "interpreted as cell centers, but are not "
-                                "monotonically increasing or decreasing. "
-                                "This may lead to incorrectly calculated cell "
-                                "edges, in which case, please supply "
-                                f"explicit cell edges to {funcname}.")
+                    dX = np.diff(X, axis=1) * 0.5
+                    if (require_monotonicity and
+                            not (np.all(dX >= 0) or np.all(dX <= 0))):
+                        _api.warn_external(
+                            f"The input coordinates to {funcname} are "
+                            "interpreted as cell centers, but are not "
+                            "monotonically increasing or decreasing. "
+                            "This may lead to incorrectly calculated cell "
+                            "edges, in which case, please supply "
+                            f"explicit cell edges to {funcname}.")
 
-                        hstack = np.ma.hstack if np.ma.isMA(X) else np.hstack
-                        X = hstack((X[:, [0]] - dX[:, [0]],
-                                    X[:, :-1] + dX,
-                                    X[:, [-1]] + dX[:, [-1]]))
-                    else:
-                        # This is just degenerate, but we can't reliably guess
-                        # a dX if there is just one value.
-                        X = np.hstack((X, X))
+                    hstack = np.ma.hstack if np.ma.isMA(X) else np.hstack
+                    X = hstack((X[:, [0]] - dX[:, [0]],
+                                X[:, :-1] + dX,
+                                X[:, [-1]] + dX[:, [-1]]))
                     return X
 
                 if ncols == Nx:
@@ -6854,11 +6864,17 @@ or pandas.DataFrame
             greater than those of *C*, otherwise a TypeError is raised. The
             quadrilateral is colored due to the value at ``C[i, j]``.
 
-            If ``shading='nearest'`` or ``'gouraud'``, the dimensions of *X*
-            and *Y* should be the same as those of *C* (if not, a TypeError
-            will be raised).  For ``'nearest'`` the color ``C[i, j]`` is
-            centered on ``(X[i, j], Y[i, j])``.  For ``'gouraud'``, a smooth
-            interpolation is carried out between the quadrilateral corners.
+            If ``shading='nearest'`` the dimensions of *X* and *Y* should be
+            the same as those of *C*, otherwise a TypeError is raised. The
+            color ``C[i, j]`` is centered on ``(X[i, j], Y[i, j])``.
+
+            If ``shading='gouraud'`` the dimensions of *X* and *Y* should be
+            the same as those of *C* or be one greater than those of *C*,
+            otherwise a TypeError is raised. If the dimensions of *X* and *Y*
+            are one greater, they are internally converted to match the shape
+            of *C* by replacing each quadrilateral with a point at its center,
+            computed as the average of their four corners. In both cases a
+            smooth interpolation is carried out between the quadrilateral corners.
 
             If *X* and/or *Y* are 1-D arrays or column vectors they will be
             expanded as needed into the appropriate 2D arrays, making a
@@ -6897,11 +6913,16 @@ or pandas.DataFrame
             - 'nearest': Each grid point will have a color centered on it,
               extending halfway between the adjacent grid centers.  The
               dimensions of *X* and *Y* must be the same as *C*.
-            - 'gouraud': Each quad will be Gouraud shaded: The color of the
-              corners (i', j') are given by ``C[i', j']``. The color values of
-              the area in between is interpolated from the corner values.
-              The dimensions of *X* and *Y* must be the same as *C*. When
-              Gouraud shading is used, *edgecolors* is ignored.
+            - 'gouraud': If the mesh data is defined at the corners of grid
+              quadrilaterals, with *X*, *Y* and *C* having the same dimensions,
+              each grid quad will be Gouraud shaded. If the color values
+              are specified at the centers of grid quadrilaterals, *X* and *Y*
+              have dimensions one greater than those of *C*, and each colored
+              quadrilateral will use the grid quad centers as its corners, so
+              that it can be Gouraud shaded: The color of the corners (i', j')
+              are given by ``C[i', j']``, and the color values of the area
+              in between are interpolated from the corner values.
+              When Gouraud shading is used, *edgecolors* is ignored.
             - 'auto': Choose 'flat' if dimensions of *X* and *Y* are one
               larger than *C*.  Choose 'nearest' if dimensions are the same.
 
@@ -9105,8 +9126,26 @@ such objects
 
         See Also
         --------
+        .cbook.violin_stats : calculate statistical properties of a dataset for violin
+            plotting.
         .Axes.violin : Draw a violin from pre-computed statistics.
         boxplot : Draw a box and whisker plot.
+
+        Notes
+        -----
+        The following calls are identical ::
+
+            ax.violinplot()
+
+        and ::
+
+            from matplotlib.cbook import violin_stats
+
+            stats = violin_stats()
+            ax.violin(stats)
+
+        `.violin_stats` gives you more control of the statistical calculations than
+        `.violinplot`.
         """
         vpstats = cbook.violin_stats(dataset, ("GaussianKDE", bw_method),
                                      points=points, quantiles=quantiles)
@@ -9246,6 +9285,22 @@ such objects
             Draw a violin plot from data instead of pre-computed statistics.
         .cbook.violin_stats:
             Calculate a *vpstats* dictionary from data, suitable for passing to violin.
+
+        Notes
+        -----
+        The following calls are identical ::
+
+            ax.violinplot()
+
+        and ::
+
+            from matplotlib.cbook import violin_stats
+
+            stats = violin_stats()
+            ax.violin(stats)
+
+        `.violin_stats` gives you more control of the statistical calculations than
+        `.violinplot`.
         """
 
         # Statistical quantities to be plotted on the violins
