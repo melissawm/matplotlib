@@ -160,7 +160,7 @@ and managing a development environment and workflow:
    .. grid-item-card::
       :shadow: none
 
-      **Build and install from source**
+      **Development setup**
       ^^^
       .. rst-class:: section-toc no-caption-toc
       .. toctree::
@@ -183,6 +183,7 @@ and managing a development environment and workflow:
       .. toctree::
          :maxdepth: 1
 
+         pr_guide_authors.rst
          troubleshooting.rst
 
 
@@ -231,23 +232,13 @@ manage, or release manage, these guidelines describe how our current process wor
          :maxdepth: 1
          :caption: Documentation
 
-         document
-         style_guide
-         tag_guidelines
+         document_build
+         document_format
+         document_style
+         document_tag
 
-   .. grid-item-card::
-      :shadow: none
-
-      **Triage And Review**
-      ^^^
-
-      .. rst-class:: no-caption-toc
-      .. toctree::
-         :maxdepth: 1
-         :caption: Triage and Review
-
-         triage
-         pr_guide
+.. grid:: 1 1 1 1
+   :class-row: sf-fs-1
 
    .. grid-item-card::
       :shadow: none
@@ -260,6 +251,8 @@ manage, or release manage, these guidelines describe how our current process wor
          :maxdepth: 1
          :caption: Maintenance
 
+         triage
+         pr_guide_maintainers
          release_guide
          communication_guide
          min_dep_policy

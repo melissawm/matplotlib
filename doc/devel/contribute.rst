@@ -87,8 +87,8 @@ our code consistent and mitigating the impact of changes.
 * :ref:`pr-guidelines`
 
 Code is contributed through pull requests, so we recommend that you start at
-:ref:`how-to-pull-request` If you get stuck, please reach out on the
-:ref:`contributor_incubator`
+:ref:`how-to-pull-request`. If you get stuck, please reach out on the
+:ref:`contributor_incubator`.
 
 .. _contribute_documentation:
 
@@ -133,19 +133,29 @@ Other documentation is generated from the following external sources:
 * matplotlib.org homepage: https://github.com/matplotlib/mpl-brochure-site
 * cheat sheets: https://github.com/matplotlib/cheatsheets
 * third party packages: https://github.com/matplotlib/mpl-third-party
+* Matplotlib custom Sphinx theme: https://github.com/matplotlib/mpl-sphinx-theme
 
 Instructions and guidelines for contributing documentation are found in:
 
-* :doc:`document`
-* :doc:`style_guide`
-* :doc:`tag_guidelines`
+* :doc:`document_build`
+* :doc:`document_format`
+* :doc:`document_style`
+* :doc:`document_tag`
 
 Documentation is contributed through pull requests, so we recommend that you start
 at :ref:`how-to-pull-request`. If that feels intimidating, we encourage you to
 `open an issue`_ describing what improvements you would make. If you get stuck,
-please reach out on the :ref:`contributor_incubator`
+please reach out on the :ref:`contributor_incubator`.
 
 .. _`open an issue`: https://github.com/matplotlib/matplotlib/issues/new?assignees=&labels=Documentation&projects=&template=documentation.yml&title=%5BDoc%5D%3A+
+
+Sphinx Theme
+------------
+
+Matplotlib has a few subprojects that share the same navbar and style, so these
+are centralized as a sphinx theme at
+`mpl_sphinx_theme <https://github.com/matplotlib/mpl-sphinx-theme>`_.  Changes
+to the style or top bar should be made there to propagate across all subprojects.
 
 .. _contribute_triage:
 
